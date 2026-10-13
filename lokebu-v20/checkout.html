@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5f2ea" />
+  <meta name="robots" content="noindex" />
+  <title>Finalizar compra | LOKEBU</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="checkout.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="index.html" aria-label="LOKEBU inicio"><span>lokebu</span><i></i></a>
+      <a class="text-link" href="index.html#precios">← Volver</a>
+    </div>
+  </header>
+
+  <main class="checkout section-pad">
+    <div class="container checkout-grid" id="checkout-grid">
+      <form id="checkout-form" class="checkout-form" novalidate>
+        <span class="eyebrow">FINALIZAR COMPRA</span>
+        <h1>Tu pedido.</h1>
+
+        <fieldset class="ck-block">
+          <legend>1. Producto</legend>
+          <label class="option"><input type="radio" name="producto" value="1" /><span><b>1 LOKEBU</b> <small>$29.990</small></span></label>
+          <label class="option"><input type="radio" name="producto" value="2" /><span><b>Pack x2</b> <small>$49.990 · ahorrás $9.990</small></span></label>
+          <p class="field-error" data-error-for="producto" hidden>Elegí un producto.</p>
+        </fieldset>
+
+        <fieldset class="ck-block">
+          <legend>2. Tu teléfono</legend>
+          <p class="hint">Elegí la variante que corresponde. Si tenés dudas, escribinos antes de pagar.</p>
+          <label class="option"><input type="radio" name="variante" value="iOS" /><span><b>iPhone (iOS)</b></span></label>
+          <label class="option"><input type="radio" name="variante" value="Android" /><span><b>Android</b></span></label>
+          <p class="field-error" data-error-for="variante" hidden>Elegí una variante.</p>
+        </fieldset>
+
+        <fieldset class="ck-block">
+          <legend>3. Tus datos</legend>
+          <div class="ck-row">
+            <label>Nombre y apellido<input type="text" name="nombre" autocomplete="name" required /></label>
+            <label>WhatsApp<input type="tel" name="telefono" autocomplete="tel" placeholder="11 1234 5678" required /></label>
+          </div>
+          <label>Email (opcional)<input type="email" name="email" autocomplete="email" /></label>
+          <p class="field-error" data-error-for="nombre" hidden>Ingresá tu nombre.</p>
+          <p class="field-error" data-error-for="telefono" hidden>Ingresá un WhatsApp válido.</p>
+        </fieldset>
+
+        <fieldset class="ck-block">
+          <legend>4. Entrega</legend>
+          <label class="option"><input type="radio" name="entrega" value="envio" /><span><b>Envío a domicilio</b> <small>Costo y plazo según tu zona, te los confirmamos antes de pagar.</small></span></label>
+          <label class="option"><input type="radio" name="entrega" value="retiro-ituzaingo" /><span><b>Retiro en Ituzaingó</b> <small>Mansilla 928, coordinado por WhatsApp.</small></span></label>
+          <label class="option"><input type="radio" name="entrega" value="retiro-luzuriaga" /><span><b>Retiro en Villa Luzuriaga</b> <small>Thames 689, coordinado por WhatsApp.</small></span></label>
+          <p class="field-error" data-error-for="entrega" hidden>Elegí cómo recibirlo.</p>
+
+          <div class="address" hidden>
+            <div class="ck-row">
+              <label>Calle y altura<input type="text" name="calle" autocomplete="address-line1" /></label>
+              <label>Piso / depto (opcional)<input type="text" name="depto" /></label>
+            </div>
+            <label>Provincia
+              <select name="provincia" autocomplete="address-level1">
+                <option value="">Elegí una provincia</option>
+                <option value="A">Salta</option>
+                <option value="B">Provincia de Buenos Aires</option>
+                <option value="C">Ciudad Autónoma de Buenos Aires</option>
+                <option value="D">San Luis</option>
+                <option value="E">Entre Ríos</option>
+                <option value="F">La Rioja</option>
+                <option value="G">Santiago del Estero</option>
+                <option value="H">Chaco</option>
+                <option value="J">San Juan</option>
+                <option value="K">Catamarca</option>
+                <option value="L">La Pampa</option>
+                <option value="M">Mendoza</option>
+                <option value="N">Misiones</option>
+                <option value="P">Formosa</option>
+                <option value="Q">Neuquén</option>
+                <option value="R">Río Negro</option>
+                <option value="S">Santa Fe</option>
+                <option value="T">Tucumán</option>
+                <option value="U">Chubut</option>
+                <option value="V">Tierra del Fuego</option>
+                <option value="W">Corrientes</option>
+                <option value="X">Córdoba</option>
+                <option value="Y">Jujuy</option>
+                <option value="Z">Santa Cruz</option>
+              </select>
+            </label>
+            <div class="ck-row">
+              <label>Localidad<input type="text" name="localidad" autocomplete="address-level2" /></label>
+              <label>Código postal<input type="text" name="cp" inputmode="numeric" autocomplete="postal-code" maxlength="4" /></label>
+            </div>
+            <p class="hint" id="envio-status"></p>
+            <p class="field-error" data-error-for="direccion" hidden>Completá la dirección de envío, la provincia y el código postal (4 dígitos).</p>
+          </div>
+        </fieldset>
+
+        <fieldset class="ck-block">
+          <legend>5. Forma de pago</legend>
+          <label class="option"><input type="radio" name="pago" value="transferencia" /><span><b>Transferencia bancaria</b> <small>Te mostramos los datos al confirmar.</small></span></label>
+          <label class="option"><input type="radio" name="pago" value="efectivo" /><span><b>Efectivo</b> <small>Al retirar o en la entrega, coordinado por WhatsApp.</small></span></label>
+          <p class="field-error" data-error-for="pago" hidden>Elegí una forma de pago.</p>
+        </fieldset>
+
+        <fieldset class="ck-block">
+          <legend>6. Comentarios (opcional)</legend>
+          <textarea name="comentarios" rows="3" placeholder="Algo que tengamos que saber del pedido"></textarea>
+        </fieldset>
+
+        <label class="check">
+          <input type="checkbox" name="politicas" />
+          <span>Leí y acepto las <a href="politicas.html" target="_blank" rel="noopener">Políticas de compra</a>, incluida la garantía de 6 meses y el derecho de arrepentimiento de 10 días.</span>
+        </label>
+        <p class="field-error" data-error-for="politicas" hidden>Tenés que aceptar las políticas para continuar.</p>
+
+        <button class="btn btn-dark btn-xl btn-block" type="submit">Enviar pedido</button>
+        <p class="form-footnote">Tu pedido queda reservado hasta que confirmemos el pago. Al enviarlo, te mostramos los datos para transferir.</p>
+        <p class="field-error" id="submit-error" hidden></p>
+      </form>
+
+      <aside class="summary" aria-label="Resumen del pedido">
+        <h2>Resumen</h2>
+        <div class="summary-line"><span id="sum-producto">Elegí un producto</span><b id="sum-precio">—</b></div>
+        <div class="summary-line"><span>Envío</span><b id="sum-envio">A confirmar</b></div>
+        <div class="summary-line total"><span>Total</span><b id="sum-total">—</b></div>
+        <p class="summary-note">Los precios son finales y en pesos argentinos. No se discrimina IVA.</p>
+      </aside>
+    </div>
+
+    <section id="pago-panel" class="pago-panel" hidden aria-live="polite">
+      <div class="pago-card">
+        <span class="eyebrow">PEDIDO RECIBIDO</span>
+        <h1>Ya casi está. Pagá para reservarlo.</h1>
+        <p class="pago-id">Número de pedido <b id="pp-id"></b></p>
+        <div class="pago-monto"><span>Total a pagar</span><strong id="pp-total"></strong></div>
+
+        <div id="pp-transfer" class="pago-datos">
+          <div class="dato">
+            <span>Alias</span>
+            <b id="pp-alias"></b>
+            <button class="btn btn-sm" id="pp-copy" type="button">Copiar alias</button>
+          </div>
+          <div class="dato"><span>Titular</span><b id="pp-titular"></b></div>
+          <div class="dato"><span>Banco</span><b id="pp-banco"></b></div>
+        </div>
+
+        <div id="pp-efectivo" class="pago-datos" hidden>
+          <p>Coordinamos el pago en efectivo por WhatsApp al retirar o recibir tu pedido.</p>
+        </div>
+
+        <ol class="pago-pasos">
+          <li>Pagá el total indicado.</li>
+          <li>Enviá el comprobante por WhatsApp con el botón de abajo.</li>
+          <li>Seguí tu pedido con el número y tu teléfono.</li>
+        </ol>
+
+        <a id="pp-wa" class="btn btn-lime btn-xl btn-block" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>
+        <a id="pp-track" class="text-link pago-track" href="seguimiento.html">Seguir mi pedido →</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="ck-confirm" id="confirm" hidden role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="ck-confirm-card">
+      <span class="eyebrow">PEDIDO ENVIADO</span>
+      <h2 id="confirm-title">Ya casi está.</h2>
+      <p id="confirm-text"></p>
+      <button class="btn btn-dark btn-block" type="button" id="confirm-close">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
