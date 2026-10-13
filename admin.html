@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Admin pedidos | LOKEBU</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body{background:#f5f2ea}
+    .admin{max-width:1100px;margin:30px auto;padding:0 18px}
+    .admin h1{font-size:2rem;margin-bottom:16px}
+    .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+    .bar input{padding:12px 14px;border:1px solid #d9d4c7;border-radius:12px;font:inherit;min-width:260px}
+    table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:.88rem}
+    th,td{padding:10px 12px;border-bottom:1px solid #ece8dd;text-align:left;vertical-align:top}
+    th{background:#111;color:#fff;font-weight:700}
+    select,input.trk{padding:8px;border:1px solid #d9d4c7;border-radius:10px;font:inherit}
+    input.trk{width:150px}
+    .save{padding:8px 12px;border-radius:10px;border:0;background:#111;color:#fff;cursor:pointer}
+    .msg{margin-top:12px;font-size:.9rem}
+    .small{color:#666;font-size:.8rem}
+  </style>
+</head>
+<body>
+  <main class="admin">
+    <h1>Pedidos</h1>
+    <div class="bar">
+      <input type="password" id="token" placeholder="Clave de administración" autocomplete="off" />
+      <button class="save" id="load">Cargar pedidos</button>
+      <button class="save" id="refresh" hidden>Actualizar</button>
+    </div>
+    <div id="msg" class="msg"></div>
+    <div style="overflow-x:auto">
+      <table id="tabla" hidden>
+        <thead>
+          <tr><th>Pedido</th><th>Cliente</th><th>Producto / Total</th><th>Entrega</th><th>Pago</th><th>Estado</th><th>Seguimiento Correo</th><th></th></tr>
+        </thead>
+        <tbody id="cuerpo"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    const API = "/.netlify/functions/pedidos";
+    const $ = (id) => document.getElementById(id);
+    const money = (n) => "$" + Number(n).toLocaleString("es-AR");
+    let estados = [];
+    let token = "";
+
+    async function cargar() {
+      token = $("token").value.trim();
+      if (!token) { $("msg").textContent = "Ingresá la clave."; return; }
+      $("msg").textContent = "Cargando…";
+      try {
+        const res = await fetch(`${API}?admin=1`, { headers: { "x-admin-token": token } });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Error");
+        estados = data.estados;
+        render(data.pedidos);
+        $("msg").textContent = `${data.pedidos.length} pedidos`;
+        $("tabla").hidden = false;
+        $("refresh").hidden = false;
+      } catch (e) {
+        $("msg").textContent = e.message;
+      }
+    }
+
+    function render(pedidos) {
+      const cuerpo = $("cuerpo");
+      cuerpo.innerHTML = "";
+      pedidos.forEach((p) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><b>${p.id}</b><div class="small">${new Date(p.creado).toLocaleString("es-AR")}</div></td>
+          <td>${p.nombre}<div class="small">${p.telefono}</div><div class="small">${p.email || ""}</div></td>
+          <td>${p.producto}<div class="small">${money(p.total)} (envío ${money(p.envio)})</div></td>
+          <td>${p.entrega}</td>
+          <td>${p.pago}</td>
+          <td><select class="estado">${estados.map(e => `<option ${e === p.estado ? "selected" : ""}>${e}</option>`).join("")}</select></td>
+          <td><input class="trk" value="${p.tracking || ""}" placeholder="Nº tracking" /></td>
+          <td><button class="save">Guardar</button><div class="msg-row small"></div></td>`;
+        tr.querySelector(".save").addEventListener("click", async () => {
+          const estado = tr.querySelector(".estado").value;
+          const tracking = tr.querySelector(".trk").value.trim();
+          const row = tr.querySelector(".msg-row");
+          row.textContent = "Guardando…";
+          try {
+            const res = await fetch(API, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json", "x-admin-token": token },
+              body: JSON.stringify({ id: p.id, estado, tracking })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Error");
+            row.textContent = "Guardado ✓";
+          } catch (e) {
+            row.textContent = e.message;
+          }
+        });
+        cuerpo.appendChild(tr);
+      });
+    }
+
+    $("load").addEventListener("click", cargar);
+    $("refresh").addEventListener("click", cargar);
+  </script>
+</body>
+</html>
