@@ -1,9 +1,0 @@
-{
-  "name": "lokebu-web",
-  "version": "18.0.0",
-  "private": true,
-  "type": "commonjs",
-  "dependencies": {
-    "@netlify/blobs": "^8.0.0"
-  }
-}
