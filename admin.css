@@ -1,0 +1,16 @@
+body{background:#f5f2ea}
+.admin{max-width:1100px;margin:30px auto;padding:0 18px}
+.admin h1{font-size:2rem;margin-bottom:16px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+.bar input{padding:12px 14px;border:1px solid #d9d4c7;border-radius:12px;font:inherit;min-width:260px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:16px;overflow:hidden;font-size:.88rem}
+th,td{padding:10px 12px;border-bottom:1px solid #ece8dd;text-align:left;vertical-align:top}
+th{background:#111;color:#fff;font-weight:700}
+select,input.trk{padding:8px;border:1px solid #d9d4c7;border-radius:10px;font:inherit}
+input.trk{width:150px}
+.save{padding:8px 12px;border-radius:10px;border:0;background:#111;color:#fff;cursor:pointer}
+.msg{margin-top:12px;font-size:.9rem}
+.small{color:#666;font-size:.8rem}
+.admin-wrap{overflow-x:auto}
+.alerta{color:#b3261e;font-weight:700}
+.ok-pago{color:#3c6e00;font-weight:700}

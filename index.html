@@ -7,7 +7,7 @@
   <title>LOKEBU | Encontrá lo que llevás desde tu celular</title>
   <meta name="description" content="LOKEBU es una tarjeta ultrafina que guardás en tu billetera, mochila, bolso o valija. Si no la encontrás, consultá su ubicación desde la app de tu celular." />
   <meta property="og:title" content="LOKEBU | Encontrá lo que llevás desde tu celular" />
-  <meta property="og:description" content="Tarjeta ultrafina para billetera, mochila o valija. Desde $29.990." />
+  <meta property="og:description" content="Tarjeta ultrafina para billetera, mochila o valija. Desde $29.990. Envíos a todo el país y pago con Mercado Pago." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/images/hero.webp" />
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
@@ -15,6 +15,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "LOKEBU tarjeta rastreadora",
+    "description": "Tarjeta rastreadora ultrafina de 1,8 mm para billetera, mochila o valija. Compatible con iPhone y Android.",
+    "brand": { "@type": "Brand", "name": "LOKEBU" },
+    "image": ["assets/images/hero.webp"],
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "ARS",
+      "lowPrice": "29990",
+      "highPrice": "49990",
+      "offerCount": "2",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
 </head>
 <body>
   <header class="site-header" id="top">
@@ -25,6 +43,7 @@
         <a href="#usos">Usos</a>
         <a href="#caracteristicas">Características</a>
         <a href="#precios">Precios</a>
+        <a href="#compra-segura">Envíos y pagos</a>
         <a href="#faq">Preguntas</a>
       </nav>
       <a class="btn btn-dark btn-sm" href="#precios">Quiero la mía</a>
@@ -50,6 +69,11 @@
             <span><b>13 g</b> liviana</span>
             <span><b>Recargable</b> inalámbrica</span>
           </div>
+          <ul class="hero-trust" aria-label="Compra segura">
+            <li>Envíos a todo el país</li>
+            <li>Hasta en cuotas con Mercado Pago</li>
+            <li>6 meses de garantía</li>
+          </ul>
         </div>
 
         <div class="hero-demo reveal delay-1" aria-label="Demostración visual de LOKEBU">
@@ -131,8 +155,8 @@
           </article>
           <article class="info-card reveal delay-2">
             <small>ENVÍOS</small>
-            <h3>Consultá tu zona.</h3>
-            <p>Confirmamos disponibilidad, costo y plazo de envío por WhatsApp antes de cerrar la compra.</p>
+            <h3>A todo el país.</h3>
+            <p>Por Correo Argentino, con número de seguimiento, en 2 a 5 días hábiles. También podés retirarla sin costo en Ituzaingó o Villa Luzuriaga.</p>
           </article>
           <article class="info-card reveal delay-3">
             <small>GARANTÍA Y CAMBIOS</small>
@@ -227,6 +251,7 @@
             <ul class="price-benefits">
               <li>1 tarjeta LOKEBU</li>
               <li>Variante iOS o Android a elegir</li>
+              <li>6 meses de garantía</li>
             </ul>
             <a class="btn btn-dark btn-price" href="checkout.html?p=1">Quiero 1 LOKEBU <span>→</span></a>
           </article>
@@ -243,12 +268,71 @@
             <ul class="price-benefits">
               <li>2 tarjetas LOKEBU</li>
               <li>Mejor precio por unidad</li>
+              <li>Un solo envío para las dos</li>
             </ul>
             <a class="btn btn-dark btn-price" href="checkout.html?p=2">Quiero el pack x2 <span>→</span></a>
           </article>
         </div>
         <div class="pricing-note reveal">
-          <span>Compra en línea</span><i></i><span>Envíos a consultar</span><i></i><span>Pesos argentinos</span>
+          <span>Pago seguro con Mercado Pago</span><i></i><span>Envíos por Correo Argentino</span><i></i><span>Retiro sin costo</span><i></i><span>Pesos argentinos</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad buy-section" id="compra-segura">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">COMPRÁ TRANQUILO</span>
+          <h2>Pagás como quieras. Te llega a casa.</h2>
+          <p>Todo el proceso es en línea y podés seguir tu pedido en cualquier momento.</p>
+        </div>
+
+        <div class="buy-grid">
+          <article class="buy-card reveal">
+            <small>MEDIOS DE PAGO</small>
+            <h3>Elegí cómo pagar.</h3>
+            <ul class="pay-list">
+              <li><b>Mercado Pago</b><span>Crédito, débito, cuotas, dinero en cuenta o efectivo en Rapipago / Pago Fácil.</span></li>
+              <li><b>Transferencia</b><span>Al alias de la tienda, con el comprobante por WhatsApp.</span></li>
+              <li><b>Efectivo</b><span>Al retirar en persona.</span></li>
+            </ul>
+            <p class="buy-note">Los datos de tu tarjeta los procesa Mercado Pago en su sitio seguro: nosotros nunca los vemos.</p>
+          </article>
+
+          <article class="buy-card dark reveal delay-1">
+            <small>ENVÍOS · CORREO ARGENTINO</small>
+            <h3>Calculá tu envío.</h3>
+            <form class="ship-calc" id="ship-calc" novalidate>
+              <label>Provincia
+                <select name="provincia" id="calc-provincia" required><option value="">Elegí tu provincia</option></select>
+              </label>
+              <label>Código postal
+                <input name="cp" id="calc-cp" inputmode="numeric" maxlength="4" placeholder="1714" autocomplete="postal-code" />
+              </label>
+            </form>
+            <div class="ship-result" id="ship-result" aria-live="polite">
+              <strong>Desde $7.755</strong>
+              <span>Envío a domicilio · 2 a 5 días hábiles · con seguimiento</span>
+            </div>
+            <p class="buy-note light">Retiro sin costo en Ituzaingó (Mansilla 928) o Villa Luzuriaga (Thames 689).</p>
+          </article>
+
+          <article class="buy-card reveal delay-2">
+            <small>DESPUÉS DE COMPRAR</small>
+            <h3>Seguí tu pedido.</h3>
+            <ol class="after-steps">
+              <li>Te llega tu número de pedido al confirmar.</li>
+              <li>Cuando se acredita el pago, lo preparamos.</li>
+              <li>Te pasamos el seguimiento de Correo Argentino.</li>
+            </ol>
+            <a class="btn btn-dark btn-sm" href="seguimiento.html">Ver estado de mi pedido →</a>
+          </article>
+        </div>
+
+        <div class="guarantee reveal">
+          <div><b>6 meses de garantía</b><span>por defectos de fabricación</span></div>
+          <div><b>10 días para arrepentirte</b><span>Ley 24.240 de Defensa del Consumidor</span></div>
+          <div><b>Atención por WhatsApp</b><span>antes y después de comprar</span></div>
         </div>
       </div>
     </section>
@@ -291,7 +375,15 @@
           </details>
           <details>
             <summary>¿Cuánto cuesta el envío y cuánto tarda?<span>+</span></summary>
-            <p>Depende de tu zona. Consultanos por WhatsApp y te confirmamos costo y plazo antes de cerrar la compra. Más info en <a href="politicas.html#envios">Políticas de compra</a>.</p>
+            <p>Enviamos por Correo Argentino a todo el país, desde $7.755 según tu zona, en 2 a 5 días hábiles. El costo exacto se calcula en el checkout con tu código postal, y podés retirarla sin costo en Ituzaingó o Villa Luzuriaga. Más info en <a href="politicas.html#envios">Políticas de compra</a>.</p>
+          </details>
+          <details>
+            <summary>¿Qué medios de pago aceptan?<span>+</span></summary>
+            <p>Mercado Pago (tarjeta de crédito o débito, cuotas, dinero en cuenta o efectivo en Rapipago / Pago Fácil), transferencia bancaria y efectivo al retirar en persona.</p>
+          </details>
+          <details>
+            <summary>¿Es seguro pagar en la web?<span>+</span></summary>
+            <p>Sí. Los pagos con tarjeta se hacen en el sitio de Mercado Pago, que procesa tus datos: nosotros nunca los vemos ni los guardamos. Además, cada compra tiene número de pedido y podés seguir su estado en línea.</p>
           </details>
           <details>
             <summary>¿Tiene garantía?<span>+</span></summary>
@@ -317,7 +409,7 @@
     <div class="container footer-wrap">
       <a class="brand footer-brand" href="index.html"><span>lokebu</span><i></i></a>
       <p>© <span id="year"></span> LOKEBU. Buenos Aires, Argentina.</p>
-      <div class="footer-links"><a href="#faq">Preguntas frecuentes</a><a href="politicas.html">Políticas de compra</a><a href="politicas.html#privacidad">Privacidad</a></div>
+      <div class="footer-links"><a href="seguimiento.html">Seguí tu pedido</a><a href="#faq">Preguntas frecuentes</a><a href="politicas.html">Políticas de compra</a><a href="politicas.html#privacidad">Privacidad</a></div>
     </div>
     <div class="container legal-note">*La autonomía indicada es orientativa y puede variar según uso y configuración. Las imágenes son ilustrativas.</div>
   </footer>
@@ -326,6 +418,7 @@
     <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.05 3C9 3 3.3 8.6 3.3 15.5c0 2.4.7 4.7 2 6.7L3 29l7-2.2c1.8 1 3.9 1.5 6 1.5 7 0 12.7-5.6 12.7-12.5S23 3 16.05 3Zm0 23.2c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-4.1 1.3 1.3-4-.3-.4c-1.1-1.7-1.7-3.7-1.7-5.8 0-5.8 4.8-10.5 10.7-10.5s10.7 4.7 10.7 10.5-4.8 10.6-10.8 10.6Zm5.9-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.8.2-.2.3-.8 1-.9 1.2-.2.2-.4.3-.7.1-2-1-3.3-1.8-4.6-4-.3-.4.3-.4.9-1.4.1-.2.1-.4 0-.6-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.3 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.9 5.2 2.2.9 3 .9 4.1.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5-.2-.1-.5-.2-.8-.4Z"/></svg>
   </button>
 
+  <script src="tienda-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -236,3 +236,41 @@ footer{background:#0f0f0f;color:#fff;padding:36px 0 26px}.footer-wrap{display:fl
 
 /* Logo: el cursor indica que es un enlace */
 .brand{cursor:pointer}
+
+/* === V21: compra segura, pagos y envíos === */
+.hero-trust{list-style:none;display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:22px 0 0}
+.hero-trust li{display:inline-flex;align-items:center;gap:7px;background:#ebe7dc;border:1px solid var(--line);border-radius:999px;padding:8px 13px;font-size:.76rem;font-weight:800}
+.hero-trust li::before{content:"✓";color:#5a6b10;font-weight:900}
+.buy-section{background:var(--paper)}
+.buy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.buy-card{background:#f8f5ee;border:1px solid var(--line);border-radius:26px;padding:32px 28px;display:flex;flex-direction:column}
+.buy-card.dark{background:#161616;color:#fff;border-color:#161616}
+.buy-card.dark p,.buy-card.dark small{color:#a9a9a4}
+.buy-card small{font-size:.68rem;letter-spacing:.13em;font-weight:800;color:#747168}
+.buy-card h3{font-size:clamp(1.6rem,2.3vw,2.2rem);margin:14px 0 20px}
+.pay-list{list-style:none;padding:0;margin:0 0 18px;border-top:1px solid var(--line)}
+.pay-list li{display:flex;flex-direction:column;gap:3px;padding:13px 0;border-bottom:1px solid var(--line)}
+.pay-list b{font-size:.98rem}
+.pay-list span{font-size:.86rem;color:var(--muted)}
+.buy-note{font-size:.82rem;margin:auto 0 0;padding-top:10px}
+.buy-note.light{color:#a9a9a4}
+.ship-calc{display:grid;grid-template-columns:1.4fr 1fr;gap:10px}
+.ship-calc label{display:flex;flex-direction:column;gap:6px;font-size:.78rem;font-weight:700;color:#cfcfca}
+.ship-calc select,.ship-calc input{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#232323;color:#fff;font:inherit;font-size:.92rem}
+.ship-calc select:focus,.ship-calc input:focus{outline:2px solid var(--lime);border-color:var(--lime)}
+.ship-result{margin:16px 0 18px;padding:18px;border-radius:18px;background:var(--lime);color:#151515;display:flex;flex-direction:column;gap:4px}
+.ship-result strong{font-size:1.8rem;letter-spacing:-.04em;line-height:1.1}
+.ship-result span{font-size:.82rem;font-weight:600}
+.after-steps{padding-left:20px;margin:0 0 24px;color:#3a3935;font-size:.92rem;display:grid;gap:10px}
+.buy-card .btn{margin-top:auto;align-self:flex-start}
+.guarantee{display:grid;grid-template-columns:repeat(3,1fr);margin-top:16px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#f8f5ee}
+.guarantee div{padding:22px 24px;display:flex;flex-direction:column;gap:3px;border-right:1px solid var(--line)}
+.guarantee div:last-child{border-right:0}
+.guarantee b{font-size:1rem}
+.guarantee span{font-size:.82rem;color:var(--muted)}
+@media(max-width:900px){.buy-grid{grid-template-columns:1fr}.guarantee{grid-template-columns:1fr}.guarantee div{border-right:0;border-bottom:1px solid var(--line)}.guarantee div:last-child{border-bottom:0}}
+@media(max-width:620px){.buy-card{padding:26px 22px}.ship-calc{grid-template-columns:1fr}}
+
+/* Página 404 */
+.notfound{min-height:70vh;display:grid;place-items:center;text-align:center}
+.notfound h1{font-size:clamp(3rem,8vw,6rem)}
