@@ -48,14 +48,15 @@
             <label>Nombre y apellido<input type="text" name="nombre" autocomplete="name" required /></label>
             <label>WhatsApp<input type="tel" name="telefono" autocomplete="tel" placeholder="11 1234 5678" required /></label>
           </div>
-          <label>Email (opcional)<input type="email" name="email" autocomplete="email" /></label>
+          <label>Email (recomendado para recibir el comprobante)<input type="email" name="email" autocomplete="email" /></label>
           <p class="field-error" data-error-for="nombre" hidden>Ingresá tu nombre.</p>
           <p class="field-error" data-error-for="telefono" hidden>Ingresá un WhatsApp válido.</p>
+          <p class="field-error" data-error-for="email" hidden>Revisá el email.</p>
         </fieldset>
 
         <fieldset class="ck-block">
           <legend>4. Entrega</legend>
-          <label class="option"><input type="radio" name="entrega" value="envio" /><span><b>Envío a domicilio</b> <small>Costo y plazo según tu zona, te los confirmamos antes de pagar.</small></span></label>
+          <label class="option"><input type="radio" name="entrega" value="envio" /><span><b>Envío a domicilio por Correo Argentino</b> <small>A todo el país, 2 a 5 días hábiles. El costo se calcula con tu provincia y código postal.</small></span></label>
           <label class="option"><input type="radio" name="entrega" value="retiro-ituzaingo" /><span><b>Retiro en Ituzaingó</b> <small>Mansilla 928, coordinado por WhatsApp.</small></span></label>
           <label class="option"><input type="radio" name="entrega" value="retiro-luzuriaga" /><span><b>Retiro en Villa Luzuriaga</b> <small>Thames 689, coordinado por WhatsApp.</small></span></label>
           <p class="field-error" data-error-for="entrega" hidden>Elegí cómo recibirlo.</p>
@@ -105,8 +106,9 @@
 
         <fieldset class="ck-block">
           <legend>5. Forma de pago</legend>
-          <label class="option"><input type="radio" name="pago" value="transferencia" /><span><b>Transferencia bancaria</b> <small>Te mostramos los datos al confirmar.</small></span></label>
-          <label class="option"><input type="radio" name="pago" value="efectivo" /><span><b>Efectivo</b> <small>Al retirar o en la entrega, coordinado por WhatsApp.</small></span></label>
+          <label class="option"><input type="radio" name="pago" value="mercadopago" /><span><b>Mercado Pago <em class="tag">Recomendado</em></b> <small>Tarjeta de crédito o débito, cuotas, dinero en cuenta o efectivo en Rapipago / Pago Fácil. Con tarjeta o dinero en cuenta se acredita al instante.</small></span></label>
+          <label class="option"><input type="radio" name="pago" value="transferencia" /><span><b>Transferencia bancaria</b> <small>Te mostramos el alias al confirmar. Enviás el comprobante por WhatsApp.</small></span></label>
+          <label class="option" id="opt-efectivo"><input type="radio" name="pago" value="efectivo" /><span><b>Efectivo al retirar</b> <small>Solo para retiro en persona en Ituzaingó o Villa Luzuriaga.</small></span></label>
           <p class="field-error" data-error-for="pago" hidden>Elegí una forma de pago.</p>
         </fieldset>
 
@@ -121,8 +123,10 @@
         </label>
         <p class="field-error" data-error-for="politicas" hidden>Tenés que aceptar las políticas para continuar.</p>
 
-        <button class="btn btn-dark btn-xl btn-block" type="submit">Enviar pedido</button>
-        <p class="form-footnote">Tu pedido queda reservado hasta que confirmemos el pago. Al enviarlo, te mostramos los datos para transferir.</p>
+        <div class="hp" aria-hidden="true"><label>Empresa<input type="text" name="empresa" tabindex="-1" autocomplete="off" /></label></div>
+
+        <button class="btn btn-dark btn-xl btn-block" type="submit" id="submit-btn">Confirmar pedido</button>
+        <p class="form-footnote" id="submit-note">Tu pedido queda reservado hasta que se acredite el pago.</p>
         <p class="field-error" id="submit-error" hidden></p>
       </form>
 
@@ -132,6 +136,11 @@
         <div class="summary-line"><span>Envío</span><b id="sum-envio">A confirmar</b></div>
         <div class="summary-line total"><span>Total</span><b id="sum-total">—</b></div>
         <p class="summary-note">Los precios son finales y en pesos argentinos. No se discrimina IVA.</p>
+        <ul class="trust-list">
+          <li><b>Pago protegido.</b> Con Mercado Pago, los datos de tu tarjeta los procesa Mercado Pago: nosotros nunca los vemos.</li>
+          <li><b>Envío con seguimiento.</b> Te pasamos el número de Correo Argentino cuando despachamos.</li>
+          <li><b>6 meses de garantía</b> y 10 días para arrepentirte.</li>
+        </ul>
       </aside>
     </div>
 
@@ -168,15 +177,7 @@
     </section>
   </main>
 
-  <div class="ck-confirm" id="confirm" hidden role="dialog" aria-modal="true" aria-labelledby="confirm-title">
-    <div class="ck-confirm-card">
-      <span class="eyebrow">PEDIDO ENVIADO</span>
-      <h2 id="confirm-title">Ya casi está.</h2>
-      <p id="confirm-text"></p>
-      <button class="btn btn-dark btn-block" type="button" id="confirm-close">Cerrar</button>
-    </div>
-  </div>
-
+  <script src="tienda-config.js"></script>
   <script src="checkout.js"></script>
 </body>
 </html>

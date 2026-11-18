@@ -81,3 +81,20 @@
 }
 .ck-block select:focus{outline:2px solid var(--lime);border-color:#111}
 .ck-block label:has(> select){display:block;margin-bottom:12px}
+
+/* === V21: pagos y confianza === */
+.option .tag{font-style:normal;font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:var(--lime);color:#151515;border-radius:999px;padding:3px 8px;margin-left:6px;vertical-align:2px}
+.option.is-disabled{opacity:.45;cursor:not-allowed}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.trust-list{list-style:none;padding:16px 0 0;margin:16px 0 0;border-top:1px solid var(--line);display:grid;gap:10px}
+.trust-list li{font-size:.82rem;color:var(--muted);padding-left:24px;position:relative}
+.trust-list li::before{content:"✓";position:absolute;left:0;top:0;width:16px;height:16px;border-radius:50%;background:var(--lime);color:#151515;font-size:.66rem;font-weight:900;display:grid;place-items:center}
+.trust-list b{color:var(--ink)}
+.pago-banner{border-radius:18px;padding:16px 18px;margin-bottom:22px;font-weight:700}
+.pago-banner.ok{background:var(--lime);color:#151515}
+.pago-banner.pendiente{background:#fff4cc;color:#5c4500}
+.pago-banner.error{background:#fde7e5;color:#8a1c14}
+.pago-banner small{display:block;font-weight:500;margin-top:4px}
+.pago-banner a{text-decoration:underline}
+.admin-wrap{overflow-x:auto}
+.track-steps li.track-link{border-left-color:transparent;padding-top:6px}.track-steps li.track-link::before{display:none}.track-steps li.track-link a{font-weight:700;text-decoration:underline}
