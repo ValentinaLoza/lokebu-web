@@ -157,12 +157,14 @@ function armarMailCliente(pedido, tipo) {
   const hola = nombre ? `¡Hola, ${nombre}! ` : "¡Hola! ";
   const filasBase = [
     fila("Producto", `${esc(pedido.producto)} · ${esc(pedido.variante === "iOS" ? "iPhone (iOS)" : pedido.variante)}`),
-    fila("Entrega", esc(pedido.entrega)),
+    fila("Entrega", esc(pedido.direccion ? pedido.entrega : `Retiro en ${CONFIG.lugarRetiro(pedido.entrega)}`)),
     fila("Envío", pedido.envio ? fmt(pedido.envio) : "Sin costo"),
     fila("Pago", esc(NOMBRE_PAGO[pedido.pago] || pedido.pago)),
   ].join("");
   const efectivo = pedido.pago === "efectivo";
-  const lugar = String(pedido.entrega || "").replace(/^Retiro en /, ""); // "Ituzaingó (Mansilla 928)"
+  const lugar = CONFIG.lugarRetiro(pedido.entrega); // "Mansilla 928, Ituzaingó"
+  const mapa = CONFIG.mapaRetiro(pedido.entrega);
+  const linkMapa = `<br><a href="${esc(mapa)}" style="color:#151515;font-weight:700">Ver en Google Maps →</a>`;
   // Efectivo es siempre retiro en persona: no hay envío ni seguimiento, todo se coordina por WhatsApp.
   const verPedido = efectivo ? "" : boton("Ver mi pedido", linkPedido(pedido));
   const dudas = boton("Escribinos por WhatsApp", waTienda(`Hola! Tengo una consulta sobre mi pedido ${pedido.id}.`), true);
@@ -193,14 +195,14 @@ function armarMailCliente(pedido, tipo) {
       asunto = `¡Gracias por tu compra! Pedido ${pedido.id} para retirar 🙌`;
       bajada = `${hola}Tu LOKEBU quedó reservada. Escribinos por WhatsApp para coordinar día y horario, pasá a retirarla y pagás en efectivo.`;
       extra = recuadro(
-        `<b>Dónde retirarla</b><br>${esc(lugar)}<br><br><b>Cuánto pagás</b><br>${fmt(pedido.total)} en efectivo, al retirarla.<br><span style="color:#66645f;font-size:13px">Mencioná tu número de pedido <span style="white-space:nowrap">${esc(pedido.id)}</span> al retirar.</span>`
+        `<b>Dónde retirarla</b><br>${esc(lugar)}${linkMapa}<br><br><b>Cuánto pagás</b><br>${fmt(pedido.total)} en efectivo, al retirarla.<br><span style="color:#66645f;font-size:13px">Mencioná tu número de pedido <span style="white-space:nowrap">${esc(pedido.id)}</span> al retirar.</span>`
       );
       botones = boton(
         "Coordinar el retiro por WhatsApp",
         waTienda(`Hola! Hice el pedido ${pedido.id} por ${fmt(pedido.total)} para retirar en ${lugar} y pagar en efectivo. ¿Coordinamos día y horario?`),
         true
       );
-      textoExtra = [`Retirás en: ${lugar}`, `Pagás: ${fmt(pedido.total)} en efectivo al retirarla`, `Coordiná día y horario por WhatsApp: https://wa.me/${CONFIG.whatsapp}`];
+      textoExtra = [`Retirás en: ${lugar} (mapa: ${mapa})`, `Pagás: ${fmt(pedido.total)} en efectivo al retirarla`, `Coordiná día y horario por WhatsApp: https://wa.me/${CONFIG.whatsapp}`];
     }
   } else if (tipo === "pagado") {
     etiqueta = "Pago confirmado";
@@ -231,7 +233,7 @@ function armarMailCliente(pedido, tipo) {
     bajada = efectivo
       ? `${hola}Ya podés pasar a buscarlo. Escribinos por WhatsApp para coordinar día y horario. Pagás ${fmt(pedido.total)} en efectivo al retirarlo.`
       : `${hola}Ya podés pasar a buscarlo. Escribinos por WhatsApp para coordinar día y horario.`;
-    extra = recuadro(`<b>Dónde retirarlo</b><br>${esc(lugar)}`);
+    extra = recuadro(`<b>Dónde retirarlo</b><br>${esc(lugar)}${linkMapa}`);
     botones =
       boton("Coordinar el retiro", waTienda(`Hola! Quiero coordinar el retiro del pedido ${pedido.id}.`), true) + verPedido;
   } else {

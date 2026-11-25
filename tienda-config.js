@@ -16,8 +16,8 @@
     variantes: ["iOS", "Android"],
 
     retiros: {
-      "retiro-ituzaingo": "Retiro en Ituzaingó (Mansilla 928)",
-      "retiro-luzuriaga": "Retiro en Villa Luzuriaga (Thames 689)",
+      "retiro-ituzaingo": "Retiro en Mansilla 928, Ituzaingó",
+      "retiro-luzuriaga": "Retiro en Thames 689, Villa Luzuriaga",
     },
 
     // Correo Argentino PAQ.AR Clásico a domicilio, despachado desde Villa Luzuriaga.
@@ -60,6 +60,22 @@
       return 2;                             // Resto de la provincia
     }
     return CONFIG.envio.zonaPorProvincia[provincia] || null;
+  };
+
+  // "Retiro en Mansilla 928, Ituzaingó" -> "Mansilla 928, Ituzaingó".
+  // También acepta el formato viejo "Retiro en Ituzaingó (Mansilla 928)" de pedidos anteriores.
+  CONFIG.lugarRetiro = function (texto) {
+    const t = String(texto || "").replace(/^Retiro en /, "").trim();
+    const viejo = t.match(/^(.+?) \((.+)\)$/);
+    return viejo ? `${viejo[2]}, ${viejo[1]}` : t;
+  };
+
+  // Link de Google Maps a la dirección de retiro.
+  CONFIG.mapaRetiro = function (texto) {
+    const lugar = CONFIG.lugarRetiro(texto);
+    return lugar
+      ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(lugar + ", Provincia de Buenos Aires, Argentina")
+      : "";
   };
 
   CONFIG.costoEnvio = function (provincia, cp) {
