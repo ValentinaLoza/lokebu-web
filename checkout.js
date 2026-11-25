@@ -129,24 +129,66 @@ function payloadPedido() {
 
 function mostrarPanelPago(res, pedido) {
   const efectivo = pedido.pago === "efectivo";
-  $("pp-id").textContent = res.id;
-  $("pp-total").textContent = fmt(res.total);
-  $("pp-alias").textContent = C.transferencia.alias;
-  $("pp-titular").textContent = C.transferencia.titular;
-  $("pp-banco").textContent = C.transferencia.banco;
-  $("pp-transfer").hidden = efectivo;
-  $("pp-efectivo").hidden = !efectivo;
+  const retiro = (C.retiros[pedido.entrega] || "").replace(/^Retiro en /, ""); // "Ituzaingó (Mansilla 928)"
+  const setText = (id, t) => ($(id).textContent = t);
 
-  const msg = efectivo
-    ? `Hola! Hice el pedido ${res.id} por ${fmt(res.total)} para retirar y pagar en efectivo. ¿Coordinamos día y horario?`
-    : `Hola! Te envío el comprobante de la transferencia del pedido ${res.id} por ${fmt(res.total)}. Nombre: ${pedido.nombre}.`;
+  setText("pp-id", res.id);
+  setText("pp-total", fmt(res.total));
+  $("pp-transfer").hidden = efectivo;
+  $("pp-retiro").hidden = !efectivo;
+
+  let pasos;
+  let msg;
+  if (efectivo) {
+    // Efectivo = siempre retiro en persona: no hay envío ni seguimiento, se coordina por WhatsApp.
+    setText("pp-eyebrow", "COMPRA CONFIRMADA");
+    setText("pp-titulo", "¡Listo! Tu LOKEBU te espera.");
+    setText("pp-id-label", "Número de pedido (mencionalo al retirar)");
+    setText("pp-monto-label", "Pagás al retirar");
+    setText("pp-lugar", retiro || "");
+    setText("pp-forma", `${fmt(res.total)} en efectivo`);
+    pasos = [
+      "Escribinos por WhatsApp para coordinar día y horario.",
+      `Pasá a retirarla por ${retiro}.`,
+      "Pagás el total en efectivo al retirarla.",
+    ];
+    msg = `Hola! Hice el pedido ${res.id} por ${fmt(res.total)} para retirar en ${retiro} y pagar en efectivo. ¿Coordinamos día y horario?`;
+    setText("pp-wa", "Coordinar el retiro por WhatsApp");
+    $("pp-track").hidden = true;
+  } else {
+    setText("pp-eyebrow", "PEDIDO RECIBIDO");
+    setText("pp-titulo", "Ya casi está. Transferí para confirmarlo.");
+    setText("pp-id-label", "Número de pedido");
+    setText("pp-monto-label", "Total a transferir");
+    setText("pp-alias", C.transferencia.alias);
+    setText("pp-titular", C.transferencia.titular);
+    setText("pp-banco", C.transferencia.banco);
+    pasos = [
+      "Transferí el total al alias de arriba.",
+      "Enviá el comprobante por WhatsApp con el botón de abajo.",
+      retiro
+        ? `Cuando confirmemos el pago, coordinamos el retiro en ${retiro}.`
+        : "Cuando confirmemos el pago, lo despachamos y te mandamos el número de seguimiento.",
+    ];
+    msg = `Hola! Te envío el comprobante de la transferencia del pedido ${res.id} por ${fmt(res.total)}. Nombre: ${pedido.nombre}.`;
+    setText("pp-wa", "Enviar comprobante por WhatsApp");
+    $("pp-track").hidden = false;
+    $("pp-track").href = `seguimiento.html?id=${encodeURIComponent(res.id)}&t=${encodeURIComponent(res.acceso)}`;
+  }
+
+  $("pp-pasos").replaceChildren(...pasos.map((t) => {
+    const li = document.createElement("li");
+    li.textContent = t;
+    return li;
+  }));
   $("pp-wa").href = `https://wa.me/${C.whatsapp}?text=${encodeURIComponent(msg)}`;
-  $("pp-wa").textContent = efectivo ? "Coordinar retiro por WhatsApp" : "Enviar comprobante por WhatsApp";
-  $("pp-track").href = `seguimiento.html?id=${encodeURIComponent(res.id)}&t=${encodeURIComponent(res.acceso)}`;
+  setText("pp-mail", pedido.email ? `También te mandamos estos datos a ${pedido.email}.` : "");
 
   $("checkout-grid").hidden = true;
   $("pago-panel").hidden = false;
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  // Llevar al cliente al cuadro con los pasos a seguir.
+  $("pago-panel").scrollIntoView({ behavior: "smooth", block: "start" });
+  $("pp-titulo").focus({ preventScroll: true });
 }
 
 $("pp-copy").addEventListener("click", async () => {

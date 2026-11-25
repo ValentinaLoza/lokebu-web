@@ -95,7 +95,9 @@ function armarMail(pedido, tipo) {
   const titulo = venta ? "¡Tuviste una venta!" : "Nuevo pedido";
   const bajada = venta
     ? "Mercado Pago confirmó el pago. Ya podés preparar el envío."
-    : `Quedó pendiente de pago (${NOMBRE_PAGO[pedido.pago] || pedido.pago}). Confirmalo en el panel cuando recibas el comprobante.`;
+    : pedido.pago === "efectivo"
+      ? "Es para retirar y pagar en efectivo. El cliente te va a escribir por WhatsApp para coordinar día y horario."
+      : "Quedó pendiente de pago (transferencia). Confirmalo en el panel cuando recibas el comprobante.";
 
   const mp = pedido.pagoMP || {};
   let pago = esc(NOMBRE_PAGO[pedido.pago] || pedido.pago);
@@ -107,7 +109,7 @@ function armarMail(pedido, tipo) {
   const url = siteUrl();
 
   const html = plantilla({
-    etiqueta: venta ? "Pago confirmado" : "Pendiente de pago",
+    etiqueta: venta ? "Pago confirmado" : pedido.pago === "efectivo" ? "Retiro · paga en efectivo" : "Pendiente de pago",
     etiquetaColor: venta ? "#d8ff3f" : "#fff4cc",
     titulo,
     bajada,
@@ -128,7 +130,9 @@ function armarMail(pedido, tipo) {
 
   const asunto = venta
     ? `💸 Venta confirmada ${pedido.id} · ${fmt(pedido.total)}`
-    : `🛒 Nuevo pedido ${pedido.id} · ${fmt(pedido.total)} (pendiente de pago)`;
+    : pedido.pago === "efectivo"
+      ? `🛒 Nuevo pedido ${pedido.id} · ${fmt(pedido.total)} (retiro, paga en efectivo)`
+      : `🛒 Nuevo pedido ${pedido.id} · ${fmt(pedido.total)} (pendiente de pago)`;
 
   const texto = [
     titulo, bajada, "",
@@ -157,7 +161,10 @@ function armarMailCliente(pedido, tipo) {
     fila("Envío", pedido.envio ? fmt(pedido.envio) : "Sin costo"),
     fila("Pago", esc(NOMBRE_PAGO[pedido.pago] || pedido.pago)),
   ].join("");
-  const verPedido = boton("Ver mi pedido", linkPedido(pedido));
+  const efectivo = pedido.pago === "efectivo";
+  const lugar = String(pedido.entrega || "").replace(/^Retiro en /, ""); // "Ituzaingó (Mansilla 928)"
+  // Efectivo es siempre retiro en persona: no hay envío ni seguimiento, todo se coordina por WhatsApp.
+  const verPedido = efectivo ? "" : boton("Ver mi pedido", linkPedido(pedido));
   const dudas = boton("Escribinos por WhatsApp", waTienda(`Hola! Tengo una consulta sobre mi pedido ${pedido.id}.`), true);
   const pie =
     "Recibiste este mail porque hiciste una compra en lokebu.com.ar. Si tenés dudas, respondé este mail o escribinos por WhatsApp.";
@@ -180,11 +187,20 @@ function armarMailCliente(pedido, tipo) {
         verPedido;
       textoExtra = [`Alias: ${t.alias} · Titular: ${t.titular} · Banco: ${t.banco}`, `Monto: ${fmt(pedido.total)}`, `Enviá el comprobante por WhatsApp: https://wa.me/${CONFIG.whatsapp}`];
     } else {
-      bajada = `${hola}Tu pedido quedó reservado. Escribinos por WhatsApp para coordinar el día y horario de retiro. Pagás en efectivo al retirarlo.`;
-      botones =
-        boton("Coordinar el retiro", waTienda(`Hola! Hice el pedido ${pedido.id} para retirar y pagar en efectivo. ¿Coordinamos día y horario?`), true) +
-        verPedido;
-      textoExtra = [`Coordiná el retiro por WhatsApp: https://wa.me/${CONFIG.whatsapp}`];
+      etiqueta = "Para retirar";
+      color = "#d8ff3f";
+      titulo = "¡Gracias por tu compra!";
+      asunto = `¡Gracias por tu compra! Pedido ${pedido.id} para retirar 🙌`;
+      bajada = `${hola}Tu LOKEBU quedó reservada. Escribinos por WhatsApp para coordinar día y horario, pasá a retirarla y pagás en efectivo.`;
+      extra = recuadro(
+        `<b>Dónde retirarla</b><br>${esc(lugar)}<br><br><b>Cuánto pagás</b><br>${fmt(pedido.total)} en efectivo, al retirarla.<br><span style="color:#66645f;font-size:13px">Mencioná tu número de pedido <span style="white-space:nowrap">${esc(pedido.id)}</span> al retirar.</span>`
+      );
+      botones = boton(
+        "Coordinar el retiro por WhatsApp",
+        waTienda(`Hola! Hice el pedido ${pedido.id} por ${fmt(pedido.total)} para retirar en ${lugar} y pagar en efectivo. ¿Coordinamos día y horario?`),
+        true
+      );
+      textoExtra = [`Retirás en: ${lugar}`, `Pagás: ${fmt(pedido.total)} en efectivo al retirarla`, `Coordiná día y horario por WhatsApp: https://wa.me/${CONFIG.whatsapp}`];
     }
   } else if (tipo === "pagado") {
     etiqueta = "Pago confirmado";
@@ -212,8 +228,10 @@ function armarMailCliente(pedido, tipo) {
     color = "#d8ff3f";
     titulo = "Tu pedido está listo para retirar";
     asunto = `Tu pedido ${pedido.id} está listo para retirar 🎉`;
-    bajada = `${hola}Ya podés pasar a buscarlo. Escribinos por WhatsApp para coordinar día y horario.`;
-    extra = recuadro(`<b>Dónde retirarlo</b><br>${esc(pedido.entrega)}`);
+    bajada = efectivo
+      ? `${hola}Ya podés pasar a buscarlo. Escribinos por WhatsApp para coordinar día y horario. Pagás ${fmt(pedido.total)} en efectivo al retirarlo.`
+      : `${hola}Ya podés pasar a buscarlo. Escribinos por WhatsApp para coordinar día y horario.`;
+    extra = recuadro(`<b>Dónde retirarlo</b><br>${esc(lugar)}`);
     botones =
       boton("Coordinar el retiro", waTienda(`Hola! Quiero coordinar el retiro del pedido ${pedido.id}.`), true) + verPedido;
   } else {
@@ -228,7 +246,7 @@ function armarMailCliente(pedido, tipo) {
     `Producto: ${pedido.producto} · ${pedido.variante}`,
     `Entrega: ${pedido.entrega}`,
     "",
-    `Ver tu pedido: ${linkPedido(pedido)}`,
+    efectivo ? null : `Ver tu pedido: ${linkPedido(pedido)}`,
     `WhatsApp: https://wa.me/${CONFIG.whatsapp}`,
   ].filter((l) => l !== null).join("\n");
 
@@ -277,6 +295,8 @@ async function notificarVenta(pedido, tipo) {
 */
 async function notificarCliente(pedido, tipo) {
   if (!TIPOS_CLIENTE.includes(tipo) || !clienteHabilitado() || !pedido.email) return false;
+  // En efectivo el pago se hace al retirar: no corresponde el mail de "pago confirmado, lo estamos preparando".
+  if (tipo === "pagado" && pedido.pago === "efectivo") return false;
   pedido.avisos = pedido.avisos || {};
   if (pedido.avisos[tipo]) return false;
   const mail = armarMailCliente(pedido, tipo);

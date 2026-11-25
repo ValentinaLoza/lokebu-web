@@ -99,3 +99,8 @@
 .admin-wrap{overflow-x:auto}
 .track-steps li.track-link{border-left-color:transparent;padding-top:6px}.track-steps li.track-link::before{display:none}.track-steps li.track-link a{font-weight:700;text-decoration:underline}
 .label-note{color:var(--muted);font-size:.8rem}
+/* El atributo hidden siempre gana (antes .checkout-grid{display:grid} lo pisaba y el formulario quedaba visible) */
+[hidden]{display:none !important}
+.pago-panel{scroll-margin-top:90px}
+.pago-card h1:focus{outline:none}
+.pago-mail{text-align:center;font-size:.85rem;color:var(--muted);margin:14px 0 0}
