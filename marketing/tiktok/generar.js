@@ -4,6 +4,7 @@
   Uso (desde la carpeta del proyecto):
     node marketing/tiktok/generar.js                 -> todos los videos
     node marketing/tiktok/generar.js fina precio     -> solo esos
+    node marketing/tiktok/generar.js cine            -> solo los cinematográficos
 
   Requiere Playwright (con Chromium) y ffmpeg instalados.
   Los videos salen sin música: el sonido se elige en TikTok al publicar (así usás audios en tendencia sin problemas de derechos).
@@ -14,13 +15,29 @@ const { spawn } = require("child_process");
 const { chromium } = require("playwright");
 
 const FPS = 30;
-const VIDEOS = ["fina", "billetera", "tres-usos", "iphone-android", "viaje", "precio"];
-const plantilla = "file://" + path.join(__dirname, "plantilla.html");
+// Tratamiento de cine: color cálido y apagado, viñeta y grano de película.
+const CINE = "eq=contrast=1.07:saturation=0.86:gamma=0.97,colorbalance=rs=0.035:gs=0.01:bs=-0.035:rh=0.03:bh=-0.04,vignette=angle=PI/4.6,noise=alls=6:allf=t+u";
+const CRF_CINE = "24"; // el grano pesa mucho: un poco más de compresión mantiene el look con archivos livianos
+const VIDEOS = {
+  // Publicidad (plantilla.html)
+  "fina": { plantilla: "plantilla.html" },
+  "billetera": { plantilla: "plantilla.html" },
+  "tres-usos": { plantilla: "plantilla.html" },
+  "iphone-android": { plantilla: "plantilla.html" },
+  "viaje": { plantilla: "plantilla.html" },
+  "precio": { plantilla: "plantilla.html" },
+  // Cinematográficos (cine.html)
+  "cine-objeto": { plantilla: "cine.html", filtro: CINE },
+  "cine-dia": { plantilla: "cine.html", filtro: CINE },
+  "cine-viaje": { plantilla: "cine.html", filtro: CINE },
+};
 const salida = path.join(__dirname, "salida");
 
 async function generar(browser, nombre) {
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
-  await page.goto(`${plantilla}?v=${nombre}`);
+  const conf = VIDEOS[nombre];
+  if (!conf) throw new Error(`No existe el video "${nombre}". Opciones: ${Object.keys(VIDEOS).join(", ")}`);
+  await page.goto("file://" + path.join(__dirname, conf.plantilla) + `?v=${nombre}`);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForLoadState("networkidle");
   const duracion = await page.evaluate(() => window.__duracion);
@@ -30,7 +47,8 @@ async function generar(browser, nombre) {
   const ff = spawn("ffmpeg", [
     "-y", "-loglevel", "error",
     "-f", "image2pipe", "-framerate", String(FPS), "-i", "-",
-    "-c:v", "libx264", "-preset", "medium", "-crf", "19", "-pix_fmt", "yuv420p",
+    ...(conf.filtro ? ["-vf", conf.filtro] : []),
+    "-c:v", "libx264", "-preset", "medium", "-crf", conf.filtro ? CRF_CINE : "19", "-pix_fmt", "yuv420p",
     "-movflags", "+faststart", archivo,
   ]);
   const termino = new Promise((ok, mal) => ff.on("close", (c) => (c === 0 ? ok() : mal(new Error(`ffmpeg salió con ${c}`)))));
@@ -48,7 +66,12 @@ async function generar(browser, nombre) {
 
 (async () => {
   const pedidos = process.argv.slice(2);
-  const lista = pedidos.length ? pedidos : VIDEOS;
+  // Sin argumentos: todos. "cine" o "publicidad": esa tanda.
+  const todos = Object.keys(VIDEOS);
+  const lista = !pedidos.length ? todos
+    : pedidos[0] === "cine" ? todos.filter((v) => v.startsWith("cine-"))
+    : pedidos[0] === "publicidad" ? todos.filter((v) => !v.startsWith("cine-"))
+    : pedidos;
   fs.mkdirSync(salida, { recursive: true });
   const browser = await chromium.launch();
   for (const v of lista) await generar(browser, v);

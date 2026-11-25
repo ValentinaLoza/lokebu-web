@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<title>LOKEBU · piezas cinematográficas</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=block" rel="stylesheet" />
+<style>
+/* Lienzo 1080x1920. El grano, la viñeta y el color se agregan después con ffmpeg (generar.js). */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+.video{display:none;position:relative;width:1080px;height:1920px;overflow:hidden;background:#050505;color:#f3efe6}
+.video.activo{display:block}
+
+/* Tipografía de cine */
+.frase{position:absolute;left:90px;right:180px;top:1180px;font-family:"Instrument Serif",serif;font-size:92px;line-height:1.05;letter-spacing:-1px;opacity:0;text-shadow:0 2px 24px rgba(0,0,0,.55)}
+.frase i{font-style:italic;color:#e9ff8a}
+.hora{position:absolute;left:90px;top:1110px;font-family:"IBM Plex Mono",monospace;font-size:34px;letter-spacing:4px;color:#d8d2c4;opacity:0}
+.marca{position:absolute;left:0;right:0;top:880px;display:flex;justify-content:center;align-items:flex-end;gap:14px;font-family:Manrope,sans-serif;font-weight:800;font-size:96px;letter-spacing:-4px;color:#f3efe6;opacity:0}
+.marca i{display:block;width:70px;height:20px;border-radius:99px;background:#d8ff3f;margin-bottom:16px}
+.web{position:absolute;left:0;right:0;top:1030px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:34px;letter-spacing:6px;color:#a9a49a;opacity:0}
+.negro{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+
+/* Planos con fotos: movimiento lento de cámara */
+.plano{position:absolute;inset:-4%;background-size:cover;background-position:center;opacity:0}
+.plano::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.55) 62%,rgba(0,0,0,.7) 78%,rgba(0,0,0,.35) 100%)}
+
+/* ---------- Objeto: la tarjeta en la oscuridad ---------- */
+.foco{position:absolute;left:50%;top:44%;width:1400px;height:1400px;margin:-700px 0 0 -700px;border-radius:50%;background:radial-gradient(circle,rgba(255,240,210,.42) 0%,rgba(255,240,210,.14) 28%,rgba(0,0,0,0) 58%);opacity:0}
+.escena{position:absolute;left:0;right:0;top:300px;height:1000px;perspective:2600px;display:grid;place-items:center}
+.tarjeta{position:relative;width:500px;aspect-ratio:54/85.6;transform-style:preserve-3d}
+.cuerpo{position:absolute;inset:0;transform-style:preserve-3d}
+.cara,.capa{position:absolute;inset:0;border-radius:7%/4.4%;backface-visibility:hidden}
+.capa{background:#4a4740;backface-visibility:visible}
+.frente{transform:translateZ(8.3px);background:radial-gradient(130% 90% at 30% 8%,#3d3b37 0%,#1b1a18 45%,#0d0d0c 100%);box-shadow:inset 0 0 0 2px rgba(255,245,225,.16),0 0 60px rgba(255,240,210,.10);overflow:hidden}
+.dorso{transform:rotateY(180deg) translateZ(8.3px);background:#0a0a0a}
+.ranura{position:absolute;top:6.5%;left:50%;width:27%;height:4.4%;transform:translateX(-50%);border-radius:99px;background:#050505;box-shadow:inset 0 4px 6px rgba(0,0,0,.8),0 1px 0 rgba(255,255,255,.08)}
+.senal{position:absolute;left:50%;bottom:15%;width:23%;transform:translateX(-50%);fill:#a8a49b;stroke:#a8a49b;stroke-width:2.2;stroke-linecap:round}
+.senal path{fill:none}
+.barrido{position:absolute;inset:-20%;background:linear-gradient(105deg,transparent 40%,rgba(255,250,235,.28) 50%,transparent 60%);transform:translateX(-120%)}
+
+@keyframes aparece{from{opacity:0}to{opacity:1}}
+@keyframes desaparece{from{opacity:1}to{opacity:0}}
+@keyframes texto{0%{opacity:0;transform:translateY(24px);filter:blur(8px)}100%{opacity:1;transform:none;filter:blur(0)}}
+@keyframes pushIn{from{transform:scale(1)}to{transform:scale(1.1)}}
+@keyframes pushInIzq{from{transform:scale(1.06) translateX(1.5%)}to{transform:scale(1.14) translateX(-1.5%)}}
+@keyframes giro{0%{transform:rotateX(4deg) rotateY(84deg)}100%{transform:rotateX(2deg) rotateY(-16deg)}}
+@keyframes perfil{0%{transform:rotateX(2deg) rotateY(-16deg)}100%{transform:rotateX(0deg) rotateY(80deg)}}
+@keyframes barrer{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
+@keyframes respira{0%,100%{opacity:.85}50%{opacity:1}}
+</style>
+</head>
+<body>
+
+<!-- ===================== Objeto (15 s) ===================== -->
+<section class="video" data-v="cine-objeto" data-dur="15">
+  <div class="foco" style="animation:aparece 2.5s .3s both,respira 4s 3s infinite"></div>
+  <div class="escena">
+    <div class="tarjeta" style="opacity:0;animation:aparece 2s .6s both">
+      <div class="cuerpo" style="animation:giro 6s .6s cubic-bezier(.3,.1,.2,1) both,perfil 3.2s 8.2s cubic-bezier(.5,0,.2,1) forwards">
+        <i class="capa" style="transform:translateZ(-6.3px)"></i><i class="capa" style="transform:translateZ(-4.2px)"></i><i class="capa" style="transform:translateZ(-2.1px)"></i>
+        <i class="capa" style="transform:translateZ(0)"></i><i class="capa" style="transform:translateZ(2.1px)"></i><i class="capa" style="transform:translateZ(4.2px)"></i><i class="capa" style="transform:translateZ(6.3px)"></i>
+        <div class="cara frente"><span class="ranura"></span>
+          <svg class="senal" viewBox="0 0 48 32"><circle cx="24" cy="16" r="3.2"/><path d="M17.5 9.5a9 9 0 0 0 0 13M30.5 9.5a9 9 0 0 1 0 13M12.5 5a15.5 15.5 0 0 0 0 22M35.5 5a15.5 15.5 0 0 1 0 22M7.5 1a22 22 0 0 0 0 30M40.5 1a22 22 0 0 1 0 30"/></svg>
+          <span class="barrido" style="animation:barrer 2.4s 3.2s ease-in-out both"></span>
+        </div>
+        <div class="cara dorso"><span class="ranura"></span></div>
+      </div>
+    </div>
+  </div>
+  <p class="frase" style="top:1330px;animation:texto 1.4s 4.4s both,desaparece .8s 7.6s forwards">Hay cosas que <i>no se notan.</i></p>
+  <p class="frase" style="top:1330px;animation:texto 1.2s 10.6s both;font-size:120px">1,8 mm.</p>
+  <div class="negro" style="animation:aparece .9s 12.6s both"></div>
+  <div class="marca" style="animation:aparece 1s 13.2s both"><span>lokebu</span><i></i></div>
+  <p class="web" style="animation:aparece 1s 13.6s both">LOKEBU.COM.AR</p>
+</section>
+
+<!-- ===================== Un día cualquiera (18 s) ===================== -->
+<section class="video" data-v="cine-dia" data-dur="18">
+  <div class="plano" style="background-image:url(../../assets/images/everyday.webp);animation:aparece 1.2s 0s both,pushIn 5s 0s linear both,desaparece 1s 4.2s forwards"></div>
+  <div class="plano" style="background-image:url(../../assets/images/how_wallet.webp);animation:aparece 1s 4.2s both,pushInIzq 5s 4.2s linear both,desaparece 1s 8.4s forwards"></div>
+  <div class="plano" style="background-image:url(../../assets/images/use_bag.webp);animation:aparece 1s 8.4s both,pushIn 5s 8.4s linear both,desaparece 1s 12.4s forwards"></div>
+  <div class="plano" style="background-image:url(../../assets/images/charging.webp);animation:aparece 1s 12.4s both,pushInIzq 4.5s 12.4s linear both,desaparece 1s 15.2s forwards"></div>
+
+  <p class="hora" style="animation:texto 1s .8s both,desaparece .6s 3.7s forwards">07:42 · CASA</p>
+  <p class="frase" style="animation:texto 1.2s 1.1s both,desaparece .6s 3.7s forwards">Un día <i>cualquiera.</i></p>
+  <p class="hora" style="animation:texto 1s 5s both,desaparece .6s 7.9s forwards">09:15 · CAFÉ</p>
+  <p class="frase" style="animation:texto 1.2s 5.3s both,desaparece .6s 7.9s forwards">La billetera, <i>siempre encima.</i></p>
+  <p class="hora" style="animation:texto 1s 9.2s both,desaparece .6s 11.9s forwards">13:30 · OFICINA</p>
+  <p class="frase" style="animation:texto 1.2s 9.5s both,desaparece .6s 11.9s forwards">La mochila, <i>en cualquier lado.</i></p>
+  <p class="hora" style="animation:texto 1s 13s both,desaparece .6s 14.9s forwards">23:10 · DE VUELTA</p>
+  <p class="frase" style="animation:texto 1.2s 13.2s both,desaparece .6s 14.9s forwards">Y todo <i>sigue con vos.</i></p>
+
+  <div class="negro" style="animation:aparece .8s 15.2s both"></div>
+  <p class="frase" style="top:760px;left:0;right:0;text-align:center;font-size:76px;animation:texto 1.2s 15.6s both">Para lo que <i>no querés perder.</i></p>
+  <div class="marca" style="animation:aparece 1s 16.4s both"><span>lokebu</span><i></i></div>
+  <p class="web" style="animation:aparece 1s 16.8s both">LOKEBU.COM.AR</p>
+</section>
+
+<!-- ===================== Viaje (16 s) ===================== -->
+<section class="video" data-v="cine-viaje" data-dur="16">
+  <div class="plano" style="background-image:url(../../assets/images/use_travel.webp);animation:aparece 1.4s 0s both,pushInIzq 6s 0s linear both,desaparece 1s 5.4s forwards"></div>
+  <div class="plano" style="background-image:url(../../assets/images/tech_location.webp);animation:aparece 1s 5.4s both,pushIn 5s 5.4s linear both,desaparece 1s 9.8s forwards"></div>
+  <div class="plano" style="background-image:url(../../assets/images/hero.webp);animation:aparece 1s 9.8s both,pushInIzq 4s 9.8s linear both,desaparece 1s 12.8s forwards"></div>
+
+  <p class="hora" style="animation:texto 1s 1s both,desaparece .6s 4.9s forwards">PUERTA 12 · 06:05</p>
+  <p class="frase" style="animation:texto 1.2s 1.3s both,desaparece .6s 4.9s forwards">La valija <i>va por otro camino.</i></p>
+  <p class="hora" style="animation:texto 1s 6.2s both,desaparece .6s 9.3s forwards">LLEGADAS · 14:20</p>
+  <p class="frase" style="animation:texto 1.2s 6.5s both,desaparece .6s 9.3s forwards">Abrís el mapa y <i>ves su última ubicación.</i></p>
+  <p class="frase" style="animation:texto 1.2s 10.4s both,desaparece .6s 12.4s forwards">Y viajar <i>tranquilo.</i></p>
+
+  <div class="negro" style="animation:aparece .8s 12.8s both"></div>
+  <div class="marca" style="animation:aparece 1s 13.4s both"><span>lokebu</span><i></i></div>
+  <p class="web" style="animation:aparece 1s 13.8s both">LOKEBU.COM.AR</p>
+  <p class="web" style="top:1500px;font-size:24px;letter-spacing:3px;color:#6e6a62;animation:aparece 1s 13.8s both">LA UBICACIÓN SE CONSULTA EN LA APP BUSCAR O ENCONTRAR MI DISPOSITIVO</p>
+</section>
+
+<script>
+  const v = new URLSearchParams(location.search).get("v") || "cine-objeto";
+  const sec = document.querySelector(`.video[data-v="${v}"]`);
+  sec.classList.add("activo");
+  window.__duracion = Number(sec.dataset.dur);
+  window.__tiempo = (seg) => { for (const a of document.getAnimations()) { a.pause(); a.currentTime = seg * 1000; } };
+</script>
+</body>
+</html>
