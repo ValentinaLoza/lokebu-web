@@ -18,6 +18,23 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=()"
     Content-Security-Policy = "default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
+# Páginas privadas o de proceso: Google no las indexa.
+[[headers]]
+  for = "/checkout.html"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+[[headers]]
+  for = "/seguimiento.html"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+
+# Las fotos casi no cambian: el navegador las guarda una semana (la página carga más rápido).
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
 # El panel de administración no se indexa ni se guarda en caché.
 [[headers]]
   for = "/admin.html"
