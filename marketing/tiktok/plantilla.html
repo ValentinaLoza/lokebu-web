@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<title>LOKEBU · videos para TikTok</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=block" rel="stylesheet" />
+<style>
+/* Lienzo 1080x1920. Zona segura de TikTok: los textos van entre y=220 y y=1450 y a la izquierda de x=920. */
+:root{--ink:#151515;--paper:#f5f2ea;--lime:#d8ff3f;--muted:#66645f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;font-family:Manrope,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.video{display:none;position:relative;width:1080px;height:1920px;overflow:hidden}
+.video.activo{display:block}
+.dark{background:var(--ink);color:#fff}
+.light{background:var(--paper);color:var(--ink)}
+.abs{position:absolute}
+.anim{animation-fill-mode:both;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+
+/* ---------- Bloques comunes ---------- */
+.marca{position:absolute;left:80px;top:150px;display:flex;align-items:flex-end;gap:12px;font-weight:800;font-size:58px;letter-spacing:-2.5px}
+.marca i{display:block;width:46px;height:14px;border-radius:99px;background:var(--lime);margin-bottom:10px}
+.gancho{position:absolute;left:80px;right:160px;top:300px;font-weight:800;font-size:112px;line-height:1.02;letter-spacing:-5px}
+.gancho em{font-style:normal;color:var(--lime)}
+.light .gancho em{color:var(--ink);background:var(--lime);padding:0 14px;border-radius:18px}
+.sub{position:absolute;left:80px;right:180px;font-weight:700;font-size:54px;line-height:1.15;letter-spacing:-1.5px}
+.chip{display:inline-flex;align-items:center;gap:14px;background:#fff;color:var(--ink);border-radius:999px;padding:20px 32px;font-weight:800;font-size:44px;box-shadow:0 18px 40px rgba(0,0,0,.15)}
+.chip.lime{background:var(--lime)}
+.nota{position:absolute;left:80px;right:180px;top:1390px;font-size:30px;font-weight:600;color:#8a8a85}
+
+/* Placa final */
+.final{position:absolute;inset:0;z-index:10;background:var(--ink);color:#fff;padding:0 80px;display:flex;flex-direction:column;justify-content:center;gap:40px}
+.final .marca{position:static;font-size:110px;letter-spacing:-5px}
+.final .marca i{width:84px;height:24px;margin-bottom:22px}
+.final .precio{font-size:150px;font-weight:800;letter-spacing:-7px;line-height:1;color:var(--lime)}
+.final .precio small{display:block;font-size:44px;letter-spacing:0;color:#bdbdb8;font-weight:700;margin-bottom:10px}
+.final ul{list-style:none;display:flex;flex-direction:column;gap:18px;font-size:46px;font-weight:700}
+.final li::before{content:"✓  ";color:var(--lime)}
+.final .web{display:inline-block;align-self:flex-start;background:var(--lime);color:var(--ink);border-radius:999px;padding:26px 44px;font-weight:800;font-size:56px}
+
+/* ---------- Tarjeta 3D (igual a la del sitio) ---------- */
+.escena3d{position:absolute;left:0;right:0;top:620px;height:900px;perspective:2400px;display:grid;place-items:center}
+.escena3d::before{content:"";position:absolute;width:820px;height:820px;border-radius:50%;background:radial-gradient(circle,#e3ff6e 0%,#d8ff3f 38%,rgba(216,255,63,0) 70%)}
+.tarjeta{position:relative;width:440px;aspect-ratio:54/85.6;transform-style:preserve-3d}
+.tarjeta .cuerpo{position:absolute;inset:0;transform-style:preserve-3d}
+.cara,.capa{position:absolute;inset:0;border-radius:7%/4.4%;backface-visibility:hidden}
+.capa{background:#2c2c2c;backface-visibility:visible}
+.frente{transform:translateZ(7.3px);background:radial-gradient(120% 90% at 30% 10%,#2b2b2b 0%,#151515 45%,#0c0c0c 100%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.06)}
+.dorso{transform:rotateY(180deg) translateZ(7.3px);background:radial-gradient(120% 90% at 70% 10%,#262626,#0b0b0b)}
+.ranura{position:absolute;top:6.5%;left:50%;width:27%;height:4.4%;transform:translateX(-50%);border-radius:99px;background:#efece4;box-shadow:inset 0 4px 6px rgba(0,0,0,.55)}
+.senal{position:absolute;left:50%;bottom:15%;width:23%;transform:translateX(-50%);fill:#8d8d8d;stroke:#8d8d8d;stroke-width:2.2;stroke-linecap:round}
+.senal path{fill:none}
+.medida{position:absolute;left:620px;top:1000px;padding-left:30px;border-left:5px solid var(--ink);color:var(--ink)}
+.medida b{display:block;font-size:130px;font-weight:800;letter-spacing:-6px;line-height:1}
+.medida span{font-size:44px;font-weight:700}
+
+/* ---------- Celular con mapa ---------- */
+.cel{position:absolute;left:250px;top:560px;width:580px;height:1060px;border-radius:84px;background:#0b0b0b;padding:20px;box-shadow:0 50px 120px rgba(0,0,0,.5),inset 0 0 0 4px #2b2b2b}
+.cel::before{content:"";position:absolute;top:38px;left:50%;width:160px;height:44px;transform:translateX(-50%);background:#0b0b0b;border-radius:99px;z-index:5}
+.pantalla{position:relative;width:100%;height:100%;border-radius:64px;overflow:hidden;background:#eef0ea}
+.pantalla svg{position:absolute;inset:0;width:100%;height:100%}
+.yo{position:absolute;left:50%;top:52%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#2f7bf6;border:6px solid #fff;box-shadow:0 0 0 22px rgba(47,123,246,.18)}
+.radar{position:absolute;left:50%;top:52%;width:380px;height:380px;margin:-190px 0 0 -190px;border-radius:50%;border:5px solid rgba(47,123,246,.55)}
+.pin{position:absolute;transform-origin:50% 100%}
+.pin .globo{display:block;width:96px;height:96px;border-radius:50%;background:#151515;border:7px solid var(--lime);position:relative;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+.pin .globo::before{content:"";position:absolute;left:50%;top:50%;width:34px;height:52px;transform:translate(-50%,-50%);border-radius:6px;background:#2d2d2d;box-shadow:inset 0 0 0 2px #444}
+.pin::after{content:"";position:absolute;left:50%;bottom:-14px;width:28px;height:28px;background:#151515;transform:translateX(-50%) rotate(45deg);border-radius:4px;z-index:-1}
+.hoja{position:absolute;left:20px;right:20px;bottom:20px;background:#fff;border-radius:44px;padding:30px;display:flex;gap:24px;align-items:center;box-shadow:0 -10px 40px rgba(0,0,0,.12)}
+.hoja .ico{flex:0 0 84px;height:84px;border-radius:24px;background:var(--lime)}
+.hoja b{display:block;font-size:36px;line-height:1.15}
+.hoja span{display:block;font-size:28px;color:var(--muted);margin-top:6px}
+
+/* ---------- Fotos ---------- */
+.foto{position:absolute;inset:0;background-size:cover;background-position:center}
+.foto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,0) 60%,rgba(0,0,0,.6) 100%)}
+.etiqueta{position:absolute;left:80px;top:1220px;z-index:2}
+
+/* ---------- Animaciones ---------- */
+@keyframes entra{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:none}}
+@keyframes sale{from{opacity:1}to{opacity:0}}
+@keyframes aparece{from{opacity:0}to{opacity:1}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes giroPerfil{0%{transform:rotateX(6deg) rotateY(-200deg)}45%{transform:rotateX(6deg) rotateY(-18deg)}70%{transform:rotateX(6deg) rotateY(-18deg)}100%{transform:rotateX(0deg) rotateY(76deg)}}
+@keyframes flota{0%,100%{transform:translateY(-14px) rotateY(-18deg) rotateX(6deg)}50%{transform:translateY(14px) rotateY(18deg) rotateX(4deg)}}
+@keyframes radar{0%{transform:scale(.1);opacity:1}100%{transform:scale(1.3);opacity:0}}
+@keyframes caer{0%{opacity:0;transform:translate(-50%,-160%) scale(.6)}100%{opacity:1;transform:translate(-50%,-100%) scale(1)}}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.12)}}
+@keyframes subeFinal{from{transform:translateY(100%)}to{transform:none}}
+</style>
+</head>
+<body>
+
+<!-- ===================== 1. Lo fina que es (12 s) ===================== -->
+<section class="video light" data-v="fina" data-dur="12">
+  <div class="marca"><span>lokebu</span><i></i></div>
+  <h1 class="gancho">¿Cuánto mide <em>de grosor?</em></h1>
+  <div class="escena3d">
+    <div class="tarjeta anim" style="animation:pop .8s .6s both">
+      <div class="cuerpo anim" style="animation:giroPerfil 4.2s 1s both">
+        <i class="capa" style="transform:translateZ(-5.5px)"></i><i class="capa" style="transform:translateZ(-3.6px)"></i><i class="capa" style="transform:translateZ(-1.8px)"></i>
+        <i class="capa" style="transform:translateZ(0)"></i><i class="capa" style="transform:translateZ(1.8px)"></i><i class="capa" style="transform:translateZ(3.6px)"></i><i class="capa" style="transform:translateZ(5.5px)"></i>
+        <div class="cara frente"><span class="ranura"></span>
+          <svg class="senal" viewBox="0 0 48 32"><circle cx="24" cy="16" r="3.2"/><path d="M17.5 9.5a9 9 0 0 0 0 13M30.5 9.5a9 9 0 0 1 0 13M12.5 5a15.5 15.5 0 0 0 0 22M35.5 5a15.5 15.5 0 0 1 0 22M7.5 1a22 22 0 0 0 0 30M40.5 1a22 22 0 0 1 0 30"/></svg>
+        </div>
+        <div class="cara dorso"><span class="ranura"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="medida anim" style="animation:entra .6s 5.4s both"><b>1,8 mm</b><span>entra en cualquier<br>billetera</span></div>
+  <div class="final anim" style="animation:subeFinal .6s 8.6s both">
+    <div class="marca"><span>lokebu</span><i></i></div>
+    <div class="precio"><small>Tarjeta rastreadora · desde</small>$29.990</div>
+    <ul><li>1,8 mm y 13 g</li><li>iPhone o Android</li><li>Envíos a todo el país</li></ul>
+    <span class="web">lokebu.com.ar</span>
+  </div>
+</section>
+
+<!-- ===================== 2. ¿Dónde dejé la billetera? (12 s) ===================== -->
+<section class="video light" data-v="billetera" data-dur="12">
+  <div class="marca"><span>lokebu</span><i></i></div>
+  <h1 class="gancho anim" style="font-size:100px">¿Dónde dejé <em>la billetera?</em> 😩</h1>
+  <div class="cel anim" style="animation:entra .8s .9s both">
+    <div class="pantalla">
+      <svg viewBox="0 0 300 520" preserveAspectRatio="xMidYMid slice"><rect width="300" height="520" fill="#eef0ea"/><path d="M-20 120 C 60 140, 120 60, 200 110 S 300 200, 330 170" fill="none" stroke="#bcdcf2" stroke-width="22"/><rect x="170" y="300" width="110" height="80" rx="10" fill="#d4e8c8"/><rect x="20" y="380" width="70" height="90" rx="10" fill="#d4e8c8"/><g stroke="#fff" stroke-linecap="round"><path d="M0 230 H300 M0 330 H300 M0 440 H300 M60 160 V520 M150 140 V520 M240 150 V520" stroke-width="12"/><path d="M0 280 H300 M0 390 H300 M105 160 V520 M195 160 V520 M20 190 L280 500" stroke-width="5"/></g></svg>
+      <span class="yo"></span>
+      <span class="radar anim" style="animation:radar 1.2s 2s 2 linear both"></span>
+      <span class="pin anim" style="left:72%;top:30%;animation:caer .6s 4.4s both"><span class="globo"></span></span>
+      <div class="hoja anim" style="animation:entra .5s 4.8s both"><span class="ico"></span><div><b>Billetera · Café de la esquina</b><span>Última ubicación hace 2 min</span></div></div>
+    </div>
+  </div>
+  <p class="nota anim" style="animation:aparece .5s 5s both;top:1660px">Simulación ilustrativa</p>
+  <div class="final anim" style="animation:subeFinal .6s 8.4s both">
+    <div class="marca"><span>lokebu</span><i></i></div>
+    <p style="font-size:70px;font-weight:800;letter-spacing:-3px;line-height:1.05">Va en tu billetera.<br>La ubicás desde<br>tu celular.</p>
+    <div class="precio"><small>desde</small>$29.990</div>
+    <span class="web">lokebu.com.ar</span>
+  </div>
+</section>
+
+<!-- ===================== 3. Tres cosas que no querés perder (12 s) ===================== -->
+<section class="video dark" data-v="tres-usos" data-dur="12">
+  <div class="foto anim" style="background-image:url(../../assets/images/use_wallet.webp);animation:zoom 3.2s 0s both"></div>
+  <div class="foto anim" style="background-image:url(../../assets/images/use_bag.webp);animation:aparece .4s 3s both,zoom 3.2s 3s both"></div>
+  <div class="foto anim" style="background-image:url(../../assets/images/use_travel.webp);animation:aparece .4s 6s both,zoom 3.2s 6s both"></div>
+  <div class="marca" style="color:#fff;z-index:3"><span>lokebu</span><i></i></div>
+  <h1 class="gancho anim" style="z-index:3">3 cosas que <em>no querés perder</em></h1>
+  <div class="etiqueta anim" style="animation:pop .5s .6s both,sale .3s 2.8s forwards"><span class="chip lime">1 · Billetera 👛</span></div>
+  <div class="etiqueta anim" style="animation:pop .5s 3.3s both,sale .3s 5.8s forwards"><span class="chip lime">2 · Mochila 🎒</span></div>
+  <div class="etiqueta anim" style="animation:pop .5s 6.3s both"><span class="chip lime">3 · Valija 🧳</span></div>
+  <div class="final anim" style="animation:subeFinal .6s 9s both">
+    <div class="marca"><span>lokebu</span><i></i></div>
+    <p style="font-size:70px;font-weight:800;letter-spacing:-3px;line-height:1.05">Una tarjeta de 1,8 mm<br>para encontrarlas<br>desde tu celular.</p>
+    <div class="precio"><small>desde</small>$29.990</div>
+    <span class="web">lokebu.com.ar</span>
+  </div>
+</section>
+
+<!-- ===================== 4. ¿Funciona con mi celular? (11 s) ===================== -->
+<section class="video light" data-v="iphone-android" data-dur="11">
+  <div class="marca"><span>lokebu</span><i></i></div>
+  <h1 class="gancho">¿Funciona con <em>mi celular?</em></h1>
+  <div class="abs anim" style="left:80px;right:160px;top:760px;animation:entra .6s 1.4s both">
+    <div style="background:#fff;border-radius:44px;padding:50px;box-shadow:0 20px 60px rgba(0,0,0,.08)">
+      <b style="font-size:80px;letter-spacing:-3px">iPhone </b><span style="font-size:44px;font-weight:700;color:var(--muted)">→ app Buscar</span>
+    </div>
+  </div>
+  <div class="abs anim" style="left:80px;right:160px;top:1020px;animation:entra .6s 2.4s both">
+    <div style="background:var(--ink);color:#fff;border-radius:44px;padding:50px">
+      <b style="font-size:80px;letter-spacing:-3px">Android </b><span style="font-size:44px;font-weight:700;color:#bdbdb8">→ Encontrar mi dispositivo</span>
+    </div>
+  </div>
+  <p class="sub anim" style="top:1300px;animation:entra .6s 3.6s both">Elegís tu variante al comprar ✅</p>
+  <div class="final anim" style="animation:subeFinal .6s 7.4s both">
+    <div class="marca"><span>lokebu</span><i></i></div>
+    <p style="font-size:70px;font-weight:800;letter-spacing:-3px;line-height:1.05">Tarjeta rastreadora<br>para iPhone o Android.</p>
+    <div class="precio"><small>desde</small>$29.990</div>
+    <span class="web">lokebu.com.ar</span>
+  </div>
+</section>
+
+<!-- ===================== 5. Antes de viajar (12 s) ===================== -->
+<section class="video dark" data-v="viaje" data-dur="12">
+  <div class="foto anim" style="background-image:url(../../assets/images/use_travel.webp);animation:zoom 6s 0s both"></div>
+  <div class="marca" style="color:#fff;z-index:3"><span>lokebu</span><i></i></div>
+  <h1 class="gancho anim" style="animation:sale .4s 3.4s forwards;z-index:3">Antes de despachar <em>la valija</em> ✈️</h1>
+  <div class="etiqueta anim" style="top:700px;animation:pop .5s 1.6s both,sale .4s 3.4s forwards"><span class="chip lime">Metele una LOKEBU adentro</span></div>
+  <div class="cel anim" style="animation:entra .8s 3.6s both;z-index:4">
+    <div class="pantalla">
+      <svg viewBox="0 0 300 520" preserveAspectRatio="xMidYMid slice"><rect width="300" height="520" fill="#eef0ea"/><path d="M-20 120 C 60 140, 120 60, 200 110 S 300 200, 330 170" fill="none" stroke="#bcdcf2" stroke-width="22"/><rect x="170" y="300" width="110" height="80" rx="10" fill="#d4e8c8"/><g stroke="#fff" stroke-linecap="round"><path d="M0 230 H300 M0 330 H300 M0 440 H300 M60 160 V520 M150 140 V520 M240 150 V520" stroke-width="12"/><path d="M0 280 H300 M0 390 H300 M105 160 V520 M195 160 V520" stroke-width="5"/></g></svg>
+      <span class="yo"></span>
+      <span class="radar anim" style="animation:radar 1.2s 4.6s 2 linear both"></span>
+      <span class="pin anim" style="left:78%;top:72%;animation:caer .6s 6.8s both"><span class="globo"></span></span>
+      <div class="hoja anim" style="animation:entra .5s 7.2s both"><span class="ico"></span><div><b>Valija · Aeropuerto</b><span>Última ubicación hace 25 min</span></div></div>
+    </div>
+  </div>
+  <p class="nota anim" style="animation:aparece .5s 7.4s both;top:1660px;z-index:4;color:#bdbdb8">Simulación ilustrativa</p>
+  <div class="final anim" style="animation:subeFinal .6s 9.2s both;z-index:6">
+    <div class="marca"><span>lokebu</span><i></i></div>
+    <p style="font-size:70px;font-weight:800;letter-spacing:-3px;line-height:1.05">Viajá con más<br>tranquilidad.</p>
+    <div class="precio"><small>desde</small>$29.990</div>
+    <span class="web">lokebu.com.ar</span>
+  </div>
+</section>
+
+<!-- ===================== 6. ¿Cuánto sale? (11 s) ===================== -->
+<section class="video light" data-v="precio" data-dur="11">
+  <div class="marca"><span>lokebu</span><i></i></div>
+  <h1 class="gancho">¿Cuánto <em>sale?</em></h1>
+  <div class="abs anim" style="left:80px;right:160px;top:620px;animation:entra .6s 1.2s both">
+    <div style="background:#fff;border-radius:44px;padding:44px 50px;box-shadow:0 20px 60px rgba(0,0,0,.08)">
+      <span style="font-size:36px;font-weight:800;letter-spacing:4px;color:var(--muted)">1 UNIDAD</span>
+      <div style="font-size:130px;font-weight:800;letter-spacing:-6px;line-height:1.05">$29.990</div>
+    </div>
+  </div>
+  <div class="abs anim" style="left:80px;right:160px;top:930px;animation:entra .6s 2.4s both">
+    <div style="background:var(--lime);border-radius:44px;padding:44px 50px">
+      <span style="font-size:36px;font-weight:800;letter-spacing:4px;color:#3b3d30">PACK X2 · MÁS ELEGIDA</span>
+      <div style="font-size:130px;font-weight:800;letter-spacing:-6px;line-height:1.05">$49.990</div>
+      <span style="font-size:42px;font-weight:700">Ahorrás $9.990</span>
+    </div>
+  </div>
+  <div class="abs anim" style="left:80px;top:1300px;display:flex;flex-direction:column;gap:18px;animation:entra .6s 3.6s both">
+    <span class="chip">💳 Cuotas con Mercado Pago</span>
+    <span class="chip">📦 Envíos a todo el país</span>
+  </div>
+  <div class="final anim" style="animation:subeFinal .6s 7.6s both">
+    <div class="marca"><span>lokebu</span><i></i></div>
+    <p style="font-size:70px;font-weight:800;letter-spacing:-3px;line-height:1.05">Tarjeta rastreadora<br>ultrafina.</p>
+    <ul><li>6 meses de garantía</li><li>iPhone o Android</li></ul>
+    <span class="web">lokebu.com.ar</span>
+  </div>
+</section>
+
+<script>
+  // Muestra el video pedido en ?v=. El renderizador controla el tiempo de las animaciones.
+  const v = new URLSearchParams(location.search).get("v") || "fina";
+  const sec = document.querySelector(`.video[data-v="${v}"]`);
+  sec.classList.add("activo");
+  window.__duracion = Number(sec.dataset.dur);
+  window.__tiempo = (seg) => {
+    for (const a of document.getAnimations()) { a.pause(); a.currentTime = seg * 1000; }
+  };
+</script>
+</body>
+</html>
