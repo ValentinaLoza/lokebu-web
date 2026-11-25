@@ -4,9 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f5f2ea" />
-  <title>LOKEBU | Encontrá lo que llevás desde tu celular</title>
-  <meta name="description" content="LOKEBU es una tarjeta ultrafina que guardás en tu billetera, mochila, bolso o valija. Si no la encontrás, consultá su ubicación desde la app de tu celular." />
-  <meta property="og:title" content="LOKEBU | Encontrá lo que llevás desde tu celular" />
+  <title>Tarjeta rastreadora para billetera, mochila y valija | LOKEBU</title>
+  <meta name="description" content="Tarjeta rastreadora ultrafina (1,8 mm) para tu billetera, mochila o valija. Ubicala desde tu iPhone o Android. Envíos a todo el país y cuotas con Mercado Pago." />
+  <meta property="og:title" content="LOKEBU · Tarjeta rastreadora para billetera, mochila y valija" />
+  <meta property="og:site_name" content="LOKEBU" />
+  <meta property="og:locale" content="es_AR" />
   <meta property="og:description" content="Tarjeta ultrafina para billetera, mochila o valija. Desde $29.990. Envíos a todo el país y pago con Mercado Pago." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://lokebu.com.ar/assets/images/hero.webp" />
@@ -19,23 +21,204 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "LOKEBU tarjeta rastreadora",
-    "description": "Tarjeta rastreadora ultrafina de 1,8 mm para billetera, mochila o valija. Compatible con iPhone y Android.",
-    "brand": { "@type": "Brand", "name": "LOKEBU" },
-    "image": ["https://lokebu.com.ar/assets/images/hero.webp"],
-    "url": "https://lokebu.com.ar/",
-    "offers": {
-      "@type": "AggregateOffer",
-      "priceCurrency": "ARS",
-      "lowPrice": "29990",
-      "highPrice": "49990",
-      "offerCount": "2",
-      "availability": "https://schema.org/InStock"
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Brand",
+      "@id": "https://lokebu.com.ar/#marca",
+      "name": "LOKEBU"
+    },
+    {
+      "@type": "OnlineStore",
+      "@id": "https://lokebu.com.ar/#tienda",
+      "name": "LOKEBU",
+      "url": "https://lokebu.com.ar/",
+      "logo": "https://lokebu.com.ar/assets/email-logo.png",
+      "areaServed": "AR",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://wa.me/5491135941335",
+        "availableLanguage": "es"
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "AR",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 10,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://lokebu.com.ar/#web",
+      "url": "https://lokebu.com.ar/",
+      "name": "LOKEBU",
+      "inLanguage": "es-AR",
+      "publisher": {
+        "@id": "https://lokebu.com.ar/#tienda"
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://lokebu.com.ar/#individual",
+      "name": "LOKEBU · Tarjeta rastreadora",
+      "sku": "LOKEBU-1",
+      "brand": {
+        "@id": "https://lokebu.com.ar/#marca"
+      },
+      "description": "Tarjeta rastreadora ultrafina de 1,8 mm y 13 g para billetera, mochila o valija. Se ubica desde la app del celular. Variante para iPhone o Android, recargable de forma inalámbrica.",
+      "image": [
+        "https://lokebu.com.ar/assets/images/hero.webp",
+        "https://lokebu.com.ar/assets/images/thinness.webp",
+        "https://lokebu.com.ar/assets/images/use_wallet.webp"
+      ],
+      "category": "Rastreadores y localizadores",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://lokebu.com.ar/#precios",
+        "price": "29990",
+        "priceCurrency": "ARS",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://lokebu.com.ar/#tienda"
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "AR",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 10,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+        }
+      }
+    },
+    {
+      "@type": "Product",
+      "@id": "https://lokebu.com.ar/#pack2",
+      "name": "LOKEBU · Pack x2 tarjetas rastreadoras",
+      "sku": "LOKEBU-2",
+      "brand": {
+        "@id": "https://lokebu.com.ar/#marca"
+      },
+      "description": "Pack de 2 tarjetas rastreadoras ultrafinas de 1,8 mm para billetera, mochila o valija. Se ubican desde la app del celular. Variante para iPhone o Android.",
+      "image": [
+        "https://lokebu.com.ar/assets/images/hero.webp",
+        "https://lokebu.com.ar/assets/images/thinness.webp",
+        "https://lokebu.com.ar/assets/images/use_wallet.webp"
+      ],
+      "category": "Rastreadores y localizadores",
+      "offers": {
+        "@type": "Offer",
+        "url": "https://lokebu.com.ar/#precios",
+        "price": "49990",
+        "priceCurrency": "ARS",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": {
+          "@id": "https://lokebu.com.ar/#tienda"
+        },
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "AR",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 10,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/ReturnFeesCustomerResponsibility"
+        }
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://lokebu.com.ar/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Funciona con iPhone y Android?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Hay variantes para iOS y Android. Elegís la que corresponde a tu teléfono al comprar, y te confirmamos antes del pedido si tenés dudas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Desde qué app se ubica?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En iPhone, desde la app Buscar. En Android, desde Encontrar mi dispositivo. Ambas están disponibles en App Store y Google Play."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Sirve como localizador de billetera, mochila o valija?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí. Es una tarjeta rastreadora del tamaño de un documento: la guardás en la billetera, la mochila, el bolso o la valija, y si no la encontrás consultás su última ubicación desde la app de tu celular."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Es parecida a un AirTag?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cumple una función parecida, pero en formato tarjeta: mide 1,8 mm de grosor, así que entra en la billetera sin abultar. Además hay variante para iPhone y para Android, y se recarga de forma inalámbrica."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se carga?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De forma inalámbrica, apoyándola sobre una base compatible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuánto dura la batería?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Puede alcanzar hasta 6 meses según uso, configuración y condiciones reales."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuánto cuesta el envío y cuánto tarda?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Enviamos por Correo Argentino a todo el país, desde $7.755 según tu zona, en 2 a 5 días hábiles. El costo exacto se calcula en el checkout con tu código postal, y podés retirarla sin costo en Ituzaingó o Villa Luzuriaga. Más info en Políticas de compra."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué medios de pago aceptan?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mercado Pago (tarjeta de crédito o débito, cuotas, dinero en cuenta o efectivo en Rapipago / Pago Fácil), transferencia bancaria y efectivo al retirar en persona."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Es seguro pagar en la web?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí. Los pagos con tarjeta se hacen en el sitio de Mercado Pago, que procesa tus datos: nosotros nunca los vemos ni los guardamos. Además, cada compra tiene número de pedido y podés seguir su estado en línea."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Tiene garantía?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, 6 meses desde la entrega por defectos de fabricación bajo uso normal. Además, tenés 10 días corridos para arrepentirte desde que lo recibís. Todos los detalles están en Políticas de compra."
+          }
+        }
+      ]
     }
-  }
+  ]
+}
   </script>
 </head>
 <body>
@@ -58,7 +241,7 @@
     <section class="hero hero-v4 section-pad">
       <div class="container hero-v4-grid">
         <div class="hero-head reveal">
-          <span class="eyebrow">PARA TU BILLETERA, MOCHILA O VALIJA</span>
+          <span class="eyebrow">TARJETA RASTREADORA PARA BILLETERA, MOCHILA O VALIJA</span>
           <h1>Encontrá lo que llevás <em>desde tu celular.</em></h1>
         </div>
 
@@ -416,6 +599,14 @@
           <details>
             <summary>¿Desde qué app se ubica?<span>+</span></summary>
             <p>En iPhone, desde la app Buscar. En Android, desde Encontrar mi dispositivo. Ambas están disponibles en App Store y Google Play.</p>
+          </details>
+          <details>
+            <summary>¿Sirve como localizador de billetera, mochila o valija?<span>+</span></summary>
+            <p>Sí. Es una tarjeta rastreadora del tamaño de un documento: la guardás en la billetera, la mochila, el bolso o la valija, y si no la encontrás consultás su última ubicación desde la app de tu celular.</p>
+          </details>
+          <details>
+            <summary>¿Es parecida a un AirTag?<span>+</span></summary>
+            <p>Cumple una función parecida, pero en formato tarjeta: mide 1,8 mm de grosor, así que entra en la billetera sin abultar. Además hay variante para iPhone y para Android, y se recarga de forma inalámbrica.</p>
           </details>
           <details>
             <summary>¿Cómo se carga?<span>+</span></summary>
