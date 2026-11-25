@@ -1,5 +1,6 @@
 import { getStore } from "@netlify/blobs";
 import MP from "../lib/mercadopago.js";
+import AVISO from "../lib/notificar.js";
 
 /*
   Notificaciones de Mercado Pago (Webhooks).
@@ -68,10 +69,12 @@ export default async (req) => {
     };
 
     const montoOk = pago.currency_id === "ARS" && Number(pago.transaction_amount) >= Number(pedido.total);
+    let ventaNueva = false;
     if (pago.status === "approved" && pedido.estado === "Pendiente de pago") {
       if (montoOk) {
         pedido.estado = "Pago confirmado";
         pedido.historial.push({ estado: "Pago confirmado", fecha: ahora });
+        ventaNueva = true;
       } else {
         console.error("Monto MP no coincide", id, pago.transaction_amount, pedido.total);
         pedido.pagoMP.alerta = "El monto pagado no coincide con el total del pedido";
@@ -79,6 +82,7 @@ export default async (req) => {
     }
 
     await s.setJSON(`orders/${id}`, pedido);
+    if (ventaNueva) await AVISO.notificarVenta(pedido, "venta");
     return ok();
   } catch (err) {
     console.error("Error procesando webhook MP:", err.status, JSON.stringify(err.detail || err.message));

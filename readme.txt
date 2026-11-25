@@ -19,7 +19,21 @@ VARIABLES DE ENTORNO EN NETLIFY (Site configuration > Environment variables)
 - ADMIN_TOKEN          clave larga para admin.html (obligatoria)
 - MP_ACCESS_TOKEN      Access Token de PRODUCCIÓN de Mercado Pago (APP_USR-...)
 - MP_WEBHOOK_SECRET    "Clave secreta" de Webhooks de tu aplicación de Mercado Pago
+- RESEND_API_KEY       clave de Resend para los avisos por mail (ver abajo)
+- NOTIFY_EMAIL         mail donde recibís los avisos de pedidos y ventas
 Sin MP_ACCESS_TOKEN la tienda funciona igual, pero la opción Mercado Pago responde "no disponible".
+Sin RESEND_API_KEY / NOTIFY_EMAIL la tienda funciona igual, solo que no llegan los mails.
+
+AVISOS POR MAIL (con el logo de LOKEBU)
+- "Venta confirmada": cuando Mercado Pago acredita un pago.
+- "Nuevo pedido": cuando alguien elige transferencia o efectivo (queda pendiente de pago).
+Configuración:
+1. Crear una cuenta gratis en https://resend.com con el MISMO mail donde querés recibir los avisos.
+2. En Resend > API Keys > Create API Key (permiso "Sending access"). Copiarla.
+3. En Netlify cargar RESEND_API_KEY (la clave) y NOTIFY_EMAIL (ese mismo mail) y volver a desplegar.
+El remitente por defecto (onboarding@resend.dev) solo puede enviar al mail de tu cuenta de Resend.
+Para enviar a otros mails o usar un remitente propio (ej. ventas@tudominio.com.ar), verificá tu
+dominio en Resend y cargá MAIL_FROM, por ejemplo: LOKEBU <ventas@tudominio.com.ar>
 
 CONFIGURAR MERCADO PAGO
 1. https://www.mercadopago.com.ar/developers/panel > Crear aplicación (Checkout Pro).
