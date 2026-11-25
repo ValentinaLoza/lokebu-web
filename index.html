@@ -43,7 +43,7 @@
     <div class="container nav-wrap">
       <a class="brand" href="index.html" aria-label="LOKEBU inicio"><span>lokebu</span><i></i></a>
       <nav class="desktop-nav" aria-label="Navegación principal">
-        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#probalo">Probala</a>
         <a href="#usos">Usos</a>
         <a href="#caracteristicas">Características</a>
         <a href="#precios">Precios</a>
@@ -55,40 +55,55 @@
   </header>
 
   <main>
-    <section class="hero hero-v3 section-pad">
-      <div class="container hero-grid hero-grid-v3">
-        <div class="hero-copy reveal">
+    <section class="hero hero-v4 section-pad">
+      <div class="container hero-v4-grid">
+        <div class="hero-head reveal">
           <span class="eyebrow">PARA TU BILLETERA, MOCHILA O VALIJA</span>
           <h1>Encontrá lo que llevás <em>desde tu celular.</em></h1>
+        </div>
+
+        <div class="hero-stage reveal delay-1" id="hero-stage">
+          <div class="stage-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+          <button class="card3d" id="card3d" type="button" aria-pressed="false"
+            aria-label="Tarjeta LOKEBU en 3D. Deslizala para girarla o tocala para verla de perfil.">
+            <span class="card3d-float">
+              <span class="card3d-body">
+                <span class="card3d-layer l1"></span><span class="card3d-layer l2"></span><span class="card3d-layer l3"></span>
+                <span class="card3d-layer l4"></span><span class="card3d-layer l5"></span><span class="card3d-layer l6"></span>
+                <span class="card3d-layer l7"></span><span class="card3d-layer l8"></span><span class="card3d-layer l9"></span>
+                <span class="card3d-face card3d-front">
+                  <span class="card3d-slot"></span>
+                  <svg class="card3d-signal" viewBox="0 0 48 32" aria-hidden="true"><circle cx="24" cy="16" r="3.2"/><path d="M17.5 9.5a9 9 0 0 0 0 13M30.5 9.5a9 9 0 0 1 0 13M12.5 5a15.5 15.5 0 0 0 0 22M35.5 5a15.5 15.5 0 0 1 0 22M7.5 1a22 22 0 0 0 0 30M40.5 1a22 22 0 0 1 0 30"/></svg>
+                  <span class="card3d-shine"></span>
+                </span>
+                <span class="card3d-face card3d-back">
+                  <span class="card3d-slot"></span>
+                  <span class="card3d-shine"></span>
+                </span>
+              </span>
+            </span>
+          </button>
+          <div class="stage-callout" aria-hidden="true"><b>1,8 mm</b><span>de grosor: entra en cualquier billetera</span></div>
+          <span class="stage-chip chip-a" aria-hidden="true"><b>13 g</b> liviana</span>
+          <span class="stage-chip chip-b" aria-hidden="true"><b>Recargable</b> inalámbrica</span>
+          <span class="stage-chip chip-c" aria-hidden="true"><b>iPhone</b> o <b>Android</b></span>
+          <p class="stage-hint" id="stage-hint"><span aria-hidden="true">↔</span> Deslizala · tocala para verla de perfil</p>
+        </div>
+
+        <div class="hero-body reveal">
           <p class="lead">LOKEBU es una tarjeta del tamaño de un documento que guardás con tus cosas. Si no la encontrás, consultás su ubicación desde la app de tu celular.</p>
           <div class="hero-price-line hero-price-line-top" aria-label="Precio desde 29.990 pesos">
             <span>Desde</span><strong>$29.990</strong><small>ARS</small>
           </div>
           <div class="hero-actions">
-            <a class="btn btn-lime" href="#precios">Quiero mi LOKEBU <span>↓</span></a>
-            <a class="text-link" href="#como-funciona">Ver cómo funciona <span>↓</span></a>
-          </div>
-          <div class="micro-proof" aria-label="Características destacadas">
-            <span><b>1,8 mm</b> ultrafina</span>
-            <span><b>13 g</b> liviana</span>
-            <span><b>Recargable</b> inalámbrica</span>
+            <a class="btn btn-lime" href="#precios" id="hero-cta">Quiero mi LOKEBU <span>↓</span></a>
+            <a class="text-link" href="#probalo">Probala acá <span>↓</span></a>
           </div>
           <ul class="hero-trust" aria-label="Compra segura">
             <li>Envíos a todo el país</li>
             <li>Hasta en cuotas con Mercado Pago</li>
             <li>6 meses de garantía</li>
           </ul>
-        </div>
-
-        <div class="hero-demo reveal delay-1" aria-label="Demostración visual de LOKEBU">
-          <div class="hero-demo-main">
-            <img src="assets/images/hero.webp" alt="Tarjeta LOKEBU junto a un celular mostrando un mapa" width="1200" height="2133" fetchpriority="high" />
-            <div class="demo-caption"><b>Ubicala desde tu celular.</b><span>Abrí la app y consultá su última ubicación en el mapa.</span></div>
-          </div>
-          <div class="hero-demo-wallet">
-            <img src="assets/images/hero_wallet.webp" alt="Tarjeta LOKEBU dentro de una billetera" loading="eager" />
-            <span>Va en tu billetera</span>
-          </div>
         </div>
       </div>
     </section>
@@ -125,51 +140,50 @@
           </article>
         </div>
 
-        <div class="explain-visual reveal">
-          <div class="explain-shot">
-            <img src="assets/images/how_wallet.webp" alt="LOKEBU siendo guardada en una billetera" loading="lazy" />
-            <span class="explain-tag">La llevás con tus cosas</span>
+        <div class="finder reveal" id="probalo">
+          <div class="finder-copy">
+            <span class="eyebrow">PROBALA ACÁ</span>
+            <h3>¿Dónde quedó?</h3>
+            <p>Elegí qué se te perdió y tocá <b>Buscar</b>. Así lo ves en la app de tu celular.</p>
+            <div class="finder-tabs" role="group" aria-label="Qué se te perdió">
+              <button type="button" class="finder-tab" data-item="billetera" aria-pressed="true">👛 Billetera</button>
+              <button type="button" class="finder-tab" data-item="mochila" aria-pressed="false">🎒 Mochila</button>
+              <button type="button" class="finder-tab" data-item="valija" aria-pressed="false">🧳 Valija</button>
+            </div>
+            <button type="button" class="btn btn-lime finder-go" id="finder-go">Buscar mi LOKEBU</button>
+            <small class="finder-note">Simulación ilustrativa. En la vida real la ubicación se consulta en la app Buscar (iPhone) o Encontrar mi dispositivo (Android).</small>
           </div>
-          <div class="explain-arrow" aria-hidden="true">→</div>
-          <div class="explain-shot">
-            <img src="assets/images/how_phone.webp" alt="Tarjeta LOKEBU junto a un celular con mapa" loading="lazy" />
-            <span class="explain-tag">La ubicás desde el celular</span>
+
+          <div class="finder-phone" aria-live="polite">
+            <div class="finder-screen" id="finder-screen" data-state="idle">
+              <svg class="finder-map" viewBox="0 0 300 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <rect width="300" height="520" fill="#eef0ea"/>
+                <path d="M-20 120 C 60 140, 120 60, 200 110 S 300 200, 330 170" fill="none" stroke="#bcdcf2" stroke-width="22"/>
+                <rect x="170" y="300" width="110" height="80" rx="10" fill="#d4e8c8"/>
+                <rect x="20" y="380" width="70" height="90" rx="10" fill="#d4e8c8"/>
+                <g stroke="#ffffff" stroke-linecap="round">
+                  <path d="M0 230 H300 M0 330 H300 M0 440 H300 M60 160 V520 M150 140 V520 M240 150 V520" stroke-width="12"/>
+                  <path d="M0 280 H300 M0 390 H300 M105 160 V520 M195 160 V520 M20 190 L280 500" stroke-width="5"/>
+                </g>
+              </svg>
+              <span class="finder-me" aria-hidden="true"></span>
+              <span class="finder-radar" aria-hidden="true"><i></i><i></i></span>
+              <span class="finder-pin" id="finder-pin" aria-hidden="true">
+                <span class="finder-pin-card"><span class="mini-slot"></span></span>
+              </span>
+              <div class="finder-sheet">
+                <span class="finder-sheet-icon" aria-hidden="true"><span class="mini-slot"></span></span>
+                <div>
+                  <b id="finder-title">Tocá “Buscar”</b>
+                  <span id="finder-sub">para ver dónde quedó tu LOKEBU</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section-pad info-section" id="antes-de-comprar">
-      <div class="container">
-        <div class="section-head reveal">
-          <span class="eyebrow">ANTES DE COMPRAR</span>
-          <h2>Lo que conviene saber.</h2>
-          <p>Te damos la información clave para elegir sin dudas.</p>
-        </div>
-        <div class="info-grid">
-          <article class="info-card reveal">
-            <small>COMPATIBILIDAD</small>
-            <h3>iPhone o Android.</h3>
-            <p>Elegís la variante que corresponde a tu teléfono al comprar. Si tenés dudas, te lo confirmamos por WhatsApp antes del pedido.</p>
-          </article>
-          <article class="info-card reveal delay-1">
-            <small>BATERÍA Y CARGA</small>
-            <h3>Hasta 6 meses.</h3>
-            <p>Duración orientativa, según uso y configuración. Se recarga apoyándola sobre una base inalámbrica compatible.</p>
-          </article>
-          <article class="info-card reveal delay-2">
-            <small>ENVÍOS</small>
-            <h3>A todo el país.</h3>
-            <p>Por Correo Argentino, con número de seguimiento, en 2 a 5 días hábiles. También podés retirarla sin costo en Ituzaingó o Villa Luzuriaga.</p>
-          </article>
-          <article class="info-card reveal delay-3">
-            <small>GARANTÍA Y CAMBIOS</small>
-            <h3>6 meses de garantía.</h3>
-            <p>Cubre defectos de fabricación bajo uso normal. Además, podés arrepentirte dentro de los 10 días corridos desde la entrega.</p>
-          </article>
-        </div>
-      </div>
-    </section>
 
     <section class="problem-section section-pad" id="usos">
       <div class="container">
@@ -181,6 +195,7 @@
           <p>Billetera, mochila o valija: elegí dónde querés llevarla.</p>
         </div>
 
+        <p class="swipe-hint" aria-hidden="true">Deslizá para ver más</p>
         <div class="problem-grid">
           <article class="problem-card reveal">
             <img src="assets/images/use_wallet.webp" alt="Tarjeta LOKEBU en una billetera" loading="lazy" />
@@ -341,6 +356,39 @@
       </div>
     </section>
 
+    <section class="section-pad info-section" id="antes-de-comprar">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="eyebrow">ANTES DE COMPRAR</span>
+          <h2>Lo que conviene saber.</h2>
+          <p>Te damos la información clave para elegir sin dudas.</p>
+        </div>
+        <p class="swipe-hint" aria-hidden="true">Deslizá para ver más</p>
+        <div class="info-grid">
+          <article class="info-card reveal">
+            <small>COMPATIBILIDAD</small>
+            <h3>iPhone o Android.</h3>
+            <p>Elegís la variante que corresponde a tu teléfono al comprar. Si tenés dudas, te lo confirmamos por WhatsApp antes del pedido.</p>
+          </article>
+          <article class="info-card reveal delay-1">
+            <small>BATERÍA Y CARGA</small>
+            <h3>Hasta 6 meses.</h3>
+            <p>Duración orientativa, según uso y configuración. Se recarga apoyándola sobre una base inalámbrica compatible.</p>
+          </article>
+          <article class="info-card reveal delay-2">
+            <small>ENVÍOS</small>
+            <h3>A todo el país.</h3>
+            <p>Por Correo Argentino, con número de seguimiento, en 2 a 5 días hábiles. También podés retirarla sin costo en Ituzaingó o Villa Luzuriaga.</p>
+          </article>
+          <article class="info-card reveal delay-3">
+            <small>GARANTÍA Y CAMBIOS</small>
+            <h3>6 meses de garantía.</h3>
+            <p>Cubre defectos de fabricación bajo uso normal. Además, podés arrepentirte dentro de los 10 días corridos desde la entrega.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="travel-banner section-pad">
       <div class="container travel-wrap reveal">
         <img src="assets/images/everyday.webp" alt="Objetos cotidianos junto a la tarjeta LOKEBU" loading="lazy" />
@@ -418,11 +466,17 @@
     <div class="container legal-note">*La autonomía indicada es orientativa y puede variar según uso y configuración. Las imágenes son ilustrativas.</div>
   </footer>
 
+  <div class="buybar" id="buybar" aria-hidden="true">
+    <div class="buybar-info"><b>LOKEBU</b><span>desde $29.990 · envío a todo el país</span></div>
+    <a class="btn btn-lime" href="#precios" tabindex="-1">Comprar</a>
+  </div>
+
   <button class="whatsapp-float js-whatsapp" aria-label="Consultar por WhatsApp" type="button">
     <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.05 3C9 3 3.3 8.6 3.3 15.5c0 2.4.7 4.7 2 6.7L3 29l7-2.2c1.8 1 3.9 1.5 6 1.5 7 0 12.7-5.6 12.7-12.5S23 3 16.05 3Zm0 23.2c-1.9 0-3.8-.5-5.4-1.5l-.4-.2-4.1 1.3 1.3-4-.3-.4c-1.1-1.7-1.7-3.7-1.7-5.8 0-5.8 4.8-10.5 10.7-10.5s10.7 4.7 10.7 10.5-4.8 10.6-10.8 10.6Zm5.9-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.8.2-.2.3-.8 1-.9 1.2-.2.2-.4.3-.7.1-2-1-3.3-1.8-4.6-4-.3-.4.3-.4.9-1.4.1-.2.1-.4 0-.6-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.3 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.5c.2.2 2.4 3.7 5.9 5.2 2.2.9 3 .9 4.1.8.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.3.2-1.5-.2-.1-.5-.2-.8-.4Z"/></svg>
   </button>
 
   <script src="tienda-config.js"></script>
   <script src="script.js"></script>
+  <script src="interactivo.js"></script>
 </body>
 </html>
