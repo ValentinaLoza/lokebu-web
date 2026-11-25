@@ -2,6 +2,7 @@ import { getStore } from "@netlify/blobs";
 import crypto from "node:crypto";
 import CONFIG from "../../tienda-config.js";
 import MP from "../lib/mercadopago.js";
+import AVISO from "../lib/notificar.js";
 
 /*
   Pedidos LOKEBU (función moderna de Netlify: Blobs funciona sin configuración extra).
@@ -135,6 +136,8 @@ async function crearPedido(req) {
   }
 
   await store().setJSON(`orders/${pedido.id}`, pedido);
+  // Transferencia y efectivo: aviso de pedido nuevo. Mercado Pago avisa recién cuando se acredita el pago.
+  if (pedido.pago !== "mercadopago") await AVISO.notificarVenta(pedido, "pedido");
   return json(200, { id: pedido.id, acceso: pedido.acceso, total: pedido.total, pago: pedido.pago, linkPago });
 }
 
