@@ -65,7 +65,7 @@ async function crearPedido(req) {
   const telefono = texto(v.telefono, 25);
   if (soloDigitos(telefono).length < 8) return json(400, { error: "Teléfono inválido" });
   const email = texto(v.email, 120);
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(400, { error: "Email inválido" });
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json(400, { error: "Ingresá un email válido para recibir la confirmación" });
   if (v.politicas !== true) return json(400, { error: "Debés aceptar las políticas" });
   if (!CONFIG.pagos.includes(v.pago)) return json(400, { error: "Forma de pago inválida" });
 
@@ -136,8 +136,15 @@ async function crearPedido(req) {
   }
 
   await store().setJSON(`orders/${pedido.id}`, pedido);
-  // Transferencia y efectivo: aviso de pedido nuevo. Mercado Pago avisa recién cuando se acredita el pago.
-  if (pedido.pago !== "mercadopago") await AVISO.notificarVenta(pedido, "pedido");
+  // Transferencia y efectivo: aviso a la tienda y "Recibimos tu pedido" al cliente.
+  // Con Mercado Pago los mails salen recién cuando se acredita el pago (mp-webhook).
+  if (pedido.pago !== "mercadopago") {
+    const [, alCliente] = await Promise.all([
+      AVISO.notificarVenta(pedido, "pedido"),
+      AVISO.notificarCliente(pedido, "recibido"),
+    ]);
+    if (alCliente) await store().setJSON(`orders/${pedido.id}`, pedido);
+  }
   return json(200, { id: pedido.id, acceso: pedido.acceso, total: pedido.total, pago: pedido.pago, linkPago });
 }
 
@@ -195,8 +202,12 @@ async function actualizar(req) {
   }
   if (b.tracking !== undefined) pedido.tracking = texto(b.tracking, 40) || null;
 
+  // Mail al cliente según el nuevo estado (cada uno se manda una sola vez por pedido).
+  const tipoAviso = AVISO.AVISO_POR_ESTADO[pedido.estado];
+  const avisoCliente = tipoAviso ? await AVISO.notificarCliente(pedido, tipoAviso) : false;
+
   await s.setJSON(`orders/${id}`, pedido);
-  return json(200, { ok: true, pedido });
+  return json(200, { ok: true, pedido, avisoCliente });
 }
 
 export default async (req) => {

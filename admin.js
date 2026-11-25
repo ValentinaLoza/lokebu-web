@@ -76,6 +76,8 @@ function render(pedidos) {
     );
 
     btn.addEventListener("click", async () => {
+      if (select.value === "Despachado" && p.estado !== "Despachado" && !trk.value.trim() &&
+          !confirm("¿Marcar como despachado sin número de seguimiento? El cliente recibe el mail de \"en camino\" sin el número.")) return;
       row.textContent = "Guardando…";
       try {
         const res = await fetch(API, {
@@ -85,7 +87,8 @@ function render(pedidos) {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || "Error");
-        row.textContent = "Guardado ✓";
+        p.estado = select.value;
+        row.textContent = data.avisoCliente ? "Guardado ✓ · mail enviado al cliente" : "Guardado ✓";
       } catch (e) {
         row.textContent = e.message;
       }

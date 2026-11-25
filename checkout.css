@@ -98,3 +98,4 @@
 .pago-banner a{text-decoration:underline}
 .admin-wrap{overflow-x:auto}
 .track-steps li.track-link{border-left-color:transparent;padding-top:6px}.track-steps li.track-link::before{display:none}.track-steps li.track-link a{font-weight:700;text-decoration:underline}
+.label-note{color:var(--muted);font-size:.8rem}

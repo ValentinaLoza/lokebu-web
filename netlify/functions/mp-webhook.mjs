@@ -81,8 +81,10 @@ export default async (req) => {
       }
     }
 
+    if (ventaNueva) {
+      await Promise.all([AVISO.notificarVenta(pedido, "venta"), AVISO.notificarCliente(pedido, "pagado")]);
+    }
     await s.setJSON(`orders/${id}`, pedido);
-    if (ventaNueva) await AVISO.notificarVenta(pedido, "venta");
     return ok();
   } catch (err) {
     console.error("Error procesando webhook MP:", err.status, JSON.stringify(err.detail || err.message));

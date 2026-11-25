@@ -91,7 +91,7 @@ function validate() {
     variante: !!marcado("variante"),
     nombre: v("nombre").length >= 3,
     telefono: /^[\d\s()+-]{8,20}$/.test(v("telefono")),
-    email: !v("email") || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")),
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")),
     entrega: !!marcado("entrega"),
     pago: !!marcado("pago"),
     politicas: form.politicas.checked,
