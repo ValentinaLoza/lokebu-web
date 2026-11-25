@@ -31,9 +31,21 @@ Configuración:
 1. Crear una cuenta gratis en https://resend.com con el MISMO mail donde querés recibir los avisos.
 2. En Resend > API Keys > Create API Key (permiso "Sending access"). Copiarla.
 3. En Netlify cargar RESEND_API_KEY (la clave) y NOTIFY_EMAIL (ese mismo mail) y volver a desplegar.
-El remitente por defecto (onboarding@resend.dev) solo puede enviar al mail de tu cuenta de Resend.
-Para enviar a otros mails o usar un remitente propio (ej. ventas@tudominio.com.ar), verificá tu
-dominio en Resend y cargá MAIL_FROM, por ejemplo: LOKEBU <ventas@tudominio.com.ar>
+
+MAILS AL CLIENTE (requieren el dominio lokebu.com.ar verificado en Resend)
+- "Recibimos tu pedido": al pedir con transferencia (con los datos para transferir) o efectivo.
+- "¡Tu pago está confirmado!": automático con Mercado Pago, o cuando marcás "Pago confirmado" en el panel.
+- "¡Tu LOKEBU está en camino!": cuando marcás "Despachado". Cargá el número de seguimiento en el
+  mismo guardado para que viaje en el mail.
+- "Listo para retirar": cuando marcás "Listo para retirar".
+Cada mail se manda una sola vez por pedido. El email del cliente es obligatorio en el checkout.
+Configuración:
+1. Resend > Domains > Add Domain > lokebu.com.ar. Resend muestra registros DNS (MX, TXT/SPF y DKIM).
+2. Cargar esos registros donde administrás el DNS de lokebu.com.ar (Netlify DNS si el dominio está
+   delegado a Netlify, o tu proveedor de DNS). Esperar a que Resend lo marque "Verified".
+3. En Netlify cargar MAIL_FROM = LOKEBU <ventas@lokebu.com.ar> y volver a desplegar.
+Sin MAIL_FROM con tu dominio, los mails al cliente no se envían (los avisos a vos sí).
+Las respuestas de los clientes llegan a NOTIFY_EMAIL.
 
 CONFIGURAR MERCADO PAGO
 1. https://www.mercadopago.com.ar/developers/panel > Crear aplicación (Checkout Pro).

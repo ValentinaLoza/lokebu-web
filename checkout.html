@@ -48,10 +48,10 @@
             <label>Nombre y apellido<input type="text" name="nombre" autocomplete="name" required /></label>
             <label>WhatsApp<input type="tel" name="telefono" autocomplete="tel" placeholder="11 1234 5678" required /></label>
           </div>
-          <label>Email (recomendado para recibir el comprobante)<input type="email" name="email" autocomplete="email" /></label>
+          <label>Email <small class="label-note">(te mandamos la confirmación y el seguimiento)</small><input type="email" name="email" autocomplete="email" required /></label>
           <p class="field-error" data-error-for="nombre" hidden>Ingresá tu nombre.</p>
           <p class="field-error" data-error-for="telefono" hidden>Ingresá un WhatsApp válido.</p>
-          <p class="field-error" data-error-for="email" hidden>Revisá el email.</p>
+          <p class="field-error" data-error-for="email" hidden>Ingresá un email válido para recibir la confirmación.</p>
         </fieldset>
 
         <fieldset class="ck-block">
@@ -146,10 +146,10 @@
 
     <section id="pago-panel" class="pago-panel" hidden aria-live="polite">
       <div class="pago-card">
-        <span class="eyebrow">PEDIDO RECIBIDO</span>
-        <h1>Ya casi está. Pagá para reservarlo.</h1>
-        <p class="pago-id">Número de pedido <b id="pp-id"></b></p>
-        <div class="pago-monto"><span>Total a pagar</span><strong id="pp-total"></strong></div>
+        <span class="eyebrow" id="pp-eyebrow">PEDIDO RECIBIDO</span>
+        <h1 id="pp-titulo" tabindex="-1">Ya casi está. Pagá para reservarlo.</h1>
+        <p class="pago-id"><span id="pp-id-label">Número de pedido</span> <b id="pp-id"></b></p>
+        <div class="pago-monto"><span id="pp-monto-label">Total a pagar</span><strong id="pp-total"></strong></div>
 
         <div id="pp-transfer" class="pago-datos">
           <div class="dato">
@@ -161,17 +161,15 @@
           <div class="dato"><span>Banco</span><b id="pp-banco"></b></div>
         </div>
 
-        <div id="pp-efectivo" class="pago-datos" hidden>
-          <p>Coordinamos el pago en efectivo por WhatsApp al retirar o recibir tu pedido.</p>
+        <div id="pp-retiro" class="pago-datos" hidden>
+          <div class="dato"><span>Retirás en</span><b id="pp-lugar"></b></div>
+          <div class="dato"><span>Pagás</span><b id="pp-forma"></b></div>
         </div>
 
-        <ol class="pago-pasos">
-          <li>Pagá el total indicado.</li>
-          <li>Enviá el comprobante por WhatsApp con el botón de abajo.</li>
-          <li>Seguí tu pedido con el número y tu teléfono.</li>
-        </ol>
+        <ol class="pago-pasos" id="pp-pasos"></ol>
 
         <a id="pp-wa" class="btn btn-lime btn-xl btn-block" target="_blank" rel="noopener">Enviar comprobante por WhatsApp</a>
+        <p class="pago-mail" id="pp-mail"></p>
         <a id="pp-track" class="text-link pago-track" href="seguimiento.html">Seguir mi pedido →</a>
       </div>
     </section>
