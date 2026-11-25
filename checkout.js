@@ -129,7 +129,7 @@ function payloadPedido() {
 
 function mostrarPanelPago(res, pedido) {
   const efectivo = pedido.pago === "efectivo";
-  const retiro = (C.retiros[pedido.entrega] || "").replace(/^Retiro en /, ""); // "Ituzaingó (Mansilla 928)"
+  const retiro = C.lugarRetiro(C.retiros[pedido.entrega]); // "Mansilla 928, Ituzaingó"
   const setText = (id, t) => ($(id).textContent = t);
 
   setText("pp-id", res.id);
@@ -146,6 +146,7 @@ function mostrarPanelPago(res, pedido) {
     setText("pp-id-label", "Número de pedido (mencionalo al retirar)");
     setText("pp-monto-label", "Pagás al retirar");
     setText("pp-lugar", retiro || "");
+    $("pp-mapa").href = C.mapaRetiro(retiro);
     setText("pp-forma", `${fmt(res.total)} en efectivo`);
     pasos = [
       "Escribinos por WhatsApp para coordinar día y horario.",

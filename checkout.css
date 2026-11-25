@@ -104,3 +104,5 @@
 .pago-panel{scroll-margin-top:90px}
 .pago-card h1:focus{outline:none}
 .pago-mail{text-align:center;font-size:.85rem;color:var(--muted);margin:14px 0 0}
+.pago-datos .dato .btn{white-space:nowrap}
+#pp-mapa{justify-self:start;background:var(--lime);color:#151515;font-weight:800;margin-top:4px}
