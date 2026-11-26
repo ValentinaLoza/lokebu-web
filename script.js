@@ -70,3 +70,17 @@ document.querySelectorAll(".reveal").forEach(el => revealObserver.observe(el));
   sel.addEventListener("change", calcular);
   cp.addEventListener("input", calcular);
 })();
+
+
+/* Código de descuento desde el link (lokebu.com.ar/?cupon=TIKTOK): se guarda para el checkout. */
+(function () {
+  const C = window.LOKEBU;
+  const codigo = new URLSearchParams(location.search).get("cupon");
+  if (!C || !codigo || !C.cupon(codigo)) return;
+  try { localStorage.setItem("lokebu_cupon", C.cupon(codigo).codigo); } catch {}
+  const c = C.cupon(codigo);
+  const aviso = document.createElement("div");
+  aviso.className = "cupon-banner";
+  aviso.textContent = `🎁 ${c.nombre} activado: ${c.porcentaje}% off en tu compra`;
+  document.body.prepend(aviso);
+})();

@@ -47,6 +47,11 @@
       banco: "Mercado Pago",
     },
 
+    // Códigos de descuento: se aplican solo al precio del producto (no al envío).
+    cupones: {
+      TIKTOK: { porcentaje: 5, nombre: "Descuento TikTok" },
+    },
+
     // Formas de pago. "efectivo" solo se ofrece con retiro en persona.
     pagos: ["mercadopago", "transferencia", "efectivo"],
   };
@@ -76,6 +81,17 @@
     return lugar
       ? "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(lugar + ", Provincia de Buenos Aires, Argentina")
       : "";
+  };
+
+  // Devuelve el cupón válido ({ codigo, porcentaje, nombre }) o null.
+  CONFIG.cupon = function (codigo) {
+    const c = String(codigo || "").trim().toUpperCase();
+    return CONFIG.cupones[c] ? { codigo: c, ...CONFIG.cupones[c] } : null;
+  };
+  // Monto del descuento en pesos, redondeado.
+  CONFIG.descuento = function (precio, codigo) {
+    const c = CONFIG.cupon(codigo);
+    return c ? Math.round((precio * c.porcentaje) / 100) : 0;
   };
 
   CONFIG.costoEnvio = function (provincia, cp) {

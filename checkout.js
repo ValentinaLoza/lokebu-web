@@ -19,6 +19,31 @@ function envioActual() {
   return C.costoEnvio(prov, cp);
 }
 
+/* ---------- Código de descuento ---------- */
+let cuponAplicado = null;
+function leerCuponGuardado() {
+  try { return localStorage.getItem("lokebu_cupon") || ""; } catch { return ""; }
+}
+function guardarCupon(c) {
+  try { c ? localStorage.setItem("lokebu_cupon", c) : localStorage.removeItem("lokebu_cupon"); } catch {}
+}
+function aplicarCupon(codigo, silencioso) {
+  const estado = $("cupon-estado");
+  const c = C.cupon(codigo);
+  if (!codigo.trim()) {
+    cuponAplicado = null; guardarCupon(""); estado.textContent = ""; estado.className = "hint";
+  } else if (c) {
+    cuponAplicado = c; guardarCupon(c.codigo);
+    $("cupon").value = c.codigo;
+    estado.textContent = `✓ ${c.nombre}: ${c.porcentaje}% off en el producto.`;
+    estado.className = "hint ok";
+  } else {
+    cuponAplicado = null; guardarCupon("");
+    if (!silencioso) { estado.textContent = "Ese código no es válido."; estado.className = "hint error"; }
+  }
+  updateSummary();
+}
+
 /* ---------- Resumen ---------- */
 function updateSummary() {
   const p = productoActual();
@@ -55,16 +80,23 @@ function updateSummary() {
   }
   $("sum-producto").textContent = p.nombre;
   $("sum-precio").textContent = fmt(p.precio);
+  const desc = cuponAplicado ? C.descuento(p.precio, cuponAplicado.codigo) : 0;
+  $("sum-desc-linea").hidden = !desc;
+  if (desc) {
+    $("sum-desc-nombre").textContent = `${cuponAplicado.nombre} (${cuponAplicado.porcentaje}%)`;
+    $("sum-desc").textContent = "−" + fmt(desc);
+  }
+  const neto = p.precio - desc;
 
   if (esRetiro()) {
     $("sum-envio").textContent = "Sin costo (retiro)";
-    $("sum-total").textContent = fmt(p.precio);
+    $("sum-total").textContent = fmt(neto);
   } else if (envio) {
     $("sum-envio").textContent = fmt(envio.precio);
-    $("sum-total").textContent = fmt(p.precio + envio.precio);
+    $("sum-total").textContent = fmt(neto + envio.precio);
   } else {
     $("sum-envio").textContent = esEnvio() ? "Ingresá tu código postal" : "Elegí cómo recibirlo";
-    $("sum-total").textContent = fmt(p.precio) + " + envío";
+    $("sum-total").textContent = fmt(neto) + " + envío";
   }
 }
 
@@ -72,7 +104,13 @@ function updateSummary() {
 const inicial = new URLSearchParams(location.search).get("p");
 if (C.productos[inicial]) form.querySelector(`input[name="producto"][value="${inicial}"]`).checked = true;
 
-form.addEventListener("change", updateSummary);
+// Código desde el link (?cupon=TIKTOK) o guardado al entrar por la portada.
+$("cupon-aplicar").addEventListener("click", () => aplicarCupon($("cupon").value));
+$("cupon").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); aplicarCupon($("cupon").value); } });
+const cuponLink = new URLSearchParams(location.search).get("cupon") || leerCuponGuardado();
+if (cuponLink) { $("cupon").value = cuponLink.toUpperCase(); aplicarCupon(cuponLink, true); }
+
+form.addEventListener("change", (e) => { if (e.target.name !== "cupon") updateSummary(); });
 form.addEventListener("input", (e) => { if (e.target.name === "cp") updateSummary(); });
 updateSummary();
 
@@ -122,6 +160,7 @@ function payloadPedido() {
     cp: v("cp"),
     pago: marcado("pago"),
     comentarios: v("comentarios"),
+    cupon: cuponAplicado ? cuponAplicado.codigo : "",
     politicas: form.politicas.checked,
     empresa: v("empresa"),
   };
