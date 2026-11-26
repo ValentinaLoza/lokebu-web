@@ -17,7 +17,7 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family
 
 /* Subtítulo estilo TikTok */
 .tt{position:absolute;left:0;right:0;top:360px;display:flex;flex-direction:column;align-items:center;gap:0;z-index:6;opacity:0}
-.tt span{display:inline-block;background:#fff;color:#111;font-weight:800;font-size:90px;line-height:1.12;letter-spacing:-1.5px;padding:6px 26px;border-radius:18px;margin:-6px 0;text-align:center;max-width:900px}
+.tt span{display:inline-block;white-space:nowrap;background:#fff;color:#111;font-weight:800;font-size:90px;line-height:1.12;letter-spacing:-1.5px;padding:6px 26px;border-radius:18px;margin:-6px 0;text-align:center;max-width:900px}
 .tt span.lima{background:#d8ff3f}
 .tt em.res{font-style:normal;background:#d8ff3f;border-radius:12px;padding:0 10px;margin-right:-10px}
 .tt.abajo{top:auto;bottom:520px}
@@ -71,6 +71,21 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family
 .hoja span{display:block;font-size:26px;color:#66645f;margin-top:6px}
 .aviso{position:absolute;left:0;right:0;text-align:center;font-size:22px;letter-spacing:2px;font-weight:600;color:rgba(255,255,255,.55);z-index:6;opacity:0}
 
+/* Prueba social */
+.contador{position:absolute;left:0;right:0;top:640px;text-align:center;color:#fff}
+.contador b{display:block;font-size:330px;font-weight:800;letter-spacing:-16px;line-height:.9;color:#d8ff3f}
+.contador span{display:block;font-size:56px;font-weight:800;margin-top:20px}
+.contador small{display:block;font-size:34px;font-weight:700;color:#bdbdb8;margin-top:12px}
+.resena{position:absolute;left:110px;right:110px;top:700px;background:#fff;border-radius:46px;padding:56px 56px 50px;box-shadow:0 40px 100px rgba(0,0,0,.45)}
+.resena .estrellas{font-size:78px;letter-spacing:8px;color:#f5b301;line-height:1}
+.resena q{display:block;font-size:128px;font-weight:800;letter-spacing:-5px;color:#111;margin:26px 0 18px;quotes:"“" "”"}
+.resena small{display:block;font-size:34px;font-weight:700;color:#666}
+.lista{position:absolute;left:110px;right:110px;top:600px;display:flex;flex-direction:column;gap:30px}
+.lista div{display:flex;align-items:center;gap:30px;background:#1c1c1c;border:2px solid #2c2c2c;border-radius:34px;padding:30px 38px;color:#fff;font-size:56px;font-weight:800;letter-spacing:-1px}
+.lista div i{flex:0 0 76px;height:76px;border-radius:50%;background:#d8ff3f;color:#111;font-style:normal;display:grid;place-items:center;font-size:46px}
+.numero{position:absolute;left:60px;top:250px;font-size:300px;font-weight:800;letter-spacing:-14px;color:#d8ff3f;line-height:1;text-shadow:0 10px 50px rgba(0,0,0,.5);z-index:6}
+.parte{position:absolute;right:70px;top:150px;z-index:6;background:#111;color:#fff;border-radius:999px;padding:14px 28px;font-size:36px;font-weight:800}
+
 /* Cierre */
 .cierre{position:absolute;inset:0;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px}
 .cierre .marca{display:flex;align-items:flex-end;gap:14px;font-weight:800;font-size:120px;letter-spacing:-5px;color:#fff}
@@ -83,6 +98,9 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family
 <section class="video" data-v="ritmo-grosor" data-dur="15"></section>
 <section class="video" data-v="ritmo-pov" data-dur="15"></section>
 <section class="video" data-v="ritmo-codigo" data-dur="13"></section>
+<section class="video" data-v="ritmo-resena" data-dur="15"></section>
+<section class="video" data-v="ritmo-razones" data-dur="16"></section>
+<section class="video" data-v="ritmo-necesitabas" data-dur="14"></section>
 
 <script>
 const C = { precio1: 29990, precio2: 49990, pct: 5, codigo: "TIKTOK" };
@@ -119,8 +137,13 @@ function tt(lineas, t, hasta, o = {}) {
   const div = document.createElement("div"); div.className = "tt" + (o.abajo ? " abajo" : "");
   if (o.top) div.style.top = o.top + "px";
   // "*texto" = línea entera en verde; "algo *texto" = desde el asterisco, resaltado en verde
-  div.innerHTML = lineas.map((l) => l.startsWith("*") ? `<span class="lima">${l.slice(1)}</span>`
-    : l.includes("*") ? `<span>${l.replace(/\*(.+)$/, '<em class="res">$1</em>')}</span>` : `<span>${l}</span>`).join("");
+  // el tamaño se adapta al largo para que cada línea entre entera
+  const tam = (l) => { const n = l.replace("*", "").length; return n <= 16 ? 90 : n <= 21 ? 78 : n <= 26 ? 66 : 58; };
+  div.innerHTML = lineas.map((l) => {
+    const st = `style="font-size:${tam(l)}px"`;
+    return l.startsWith("*") ? `<span class="lima" ${st}>${l.slice(1)}</span>`
+      : l.includes("*") ? `<span ${st}>${l.replace(/\*(.+)$/, '<em class="res">$1</em>')}</span>` : `<span ${st}>${l}</span>`;
+  }).join("");
   sec.appendChild(div);
   anim(div, [{ opacity: 0, transform: "scale(.7)" }, { opacity: 1, transform: "scale(1.06)" }, { opacity: 1, transform: "scale(1)" }], t, .3);
   if (hasta) anim(div, [{ opacity: 1 }, { opacity: 0 }], hasta, .08, { fill: "forwards" });
@@ -141,6 +164,16 @@ function mapa(t, d, titulo, sub, pin) {
   const a = document.createElement("p"); a.className = "aviso"; a.style.top = "1530px"; a.textContent = "SIMULACIÓN · SE CONSULTA EN BUSCAR O ENCONTRAR MI DISPOSITIVO"; sec.appendChild(a);
   anim(a, [{ opacity: 0 }, { opacity: 1 }], t + .3, .2); anim(a, [{ opacity: 1 }, { opacity: 0 }], t + d, .05, { fill: "forwards" });
 }
+function numero(n, t, hasta, top) {
+  const d = document.createElement("div"); d.className = "numero"; d.textContent = n; if (top) d.style.top = top + "px"; sec.appendChild(d);
+  anim(d, [{ opacity: 0, transform: "scale(2)" }, { opacity: 1, transform: "scale(1)" }], t, .3);
+  anim(d, [{ opacity: 1 }, { opacity: 0 }], hasta, .05, { fill: "forwards" });
+}
+function parte(t, hasta) {
+  const d = document.createElement("div"); d.className = "parte"; d.textContent = "Parte 1"; sec.appendChild(d);
+  anim(d, [{ opacity: 0 }, { opacity: 1 }], t, .2); anim(d, [{ opacity: 1 }, { opacity: 0 }], hasta, .05, { fill: "forwards" });
+}
+const contadores = []; // números que suben según el tiempo
 function cierre(t, sub) {
   const div = plano(`<div class="cierre"><div class="marca"><span>lokebu</span><i></i></div><div class="cta">Link en la bio 👆</div><div class="sub">${sub}</div></div>`, t, 99, { golpe: false });
   anim(div.querySelector(".cta"), [{ transform: "scale(1)" }, { transform: "scale(1.06)" }, { transform: "scale(1)" }], t + .6, .9, { it: 3 });
@@ -207,9 +240,72 @@ if (v === "ritmo-codigo") {
   cierre(9.8, `Código ${C.codigo} · 5% off`);
 }
 
+/* ============ 4. Prueba social (15 s) ============ */
+if (v === "ritmo-resena") {
+  clip("8739", 0, 1.7, { oscuro: true });
+  tt(["¿Vale la pena una", "*tarjeta rastreadora?"], 0, 1.65);
+  const cont = plano(`<div class="contador"><b>+0</b><span>vendidas en Mercado Libre</span><small>y ahora también en lokebu.com.ar</small></div>`, 1.7, 2.6, { golpe: false });
+  cont.style.background = "#0d0d0d";
+  // contador animado de 0 a 25 (se resuelve según el tiempo actual)
+  const num = cont.querySelector("b"); contadores.push({ el: num, t: 1.8, d: 1.2, hasta: 25 });
+  tt(["Una opinión real 👇"], 4.35, 7.2, { top: 360 });
+  const res = plano(`<div class="resena"><div class="estrellas">★★★★★</div><q>Fabuloso</q><small>Opinión de un comprador en Mercado Libre</small></div>`, 4.3, 3, { golpe: false });
+  res.style.background = "#0d0d0d";
+  anim(res.querySelector(".resena"), [{ opacity: 0, transform: "translateY(120px) rotate(-3deg)" }, { opacity: 1, transform: "rotate(-2deg)" }], 4.4, .45, { easing: "cubic-bezier(.2,1.3,.4,1)" });
+  tarjeta(7.3, 1.4, [{ transform: "rotateY(-30deg)" }, { transform: "rotateY(10deg)" }]);
+  tt(["*1,8 mm"], 7.35, 8.65);
+  foto("../../assets/images/use_wallet.webp", 8.7, 1.2);
+  tt(["va en la billetera"], 8.75, 9.85);
+  mapa(9.9, 1.6, "Billetera · Café", "Última ubicación hace 2 min", [64, 30]);
+  tt(["la ves *desde el celu"], 10, 11.45);
+  foto("../../assets/images/charging.webp", 11.5, 1.2);
+  tt(["se carga *sin cables"], 11.55, 12.65);
+  cierre(12.7, `5% off con el código ${C.codigo}`);
+}
+
+/* ============ 5. 3 razones (16 s) ============ */
+if (v === "ritmo-razones") {
+  clip("223", 0, 1.8, { oscuro: true });
+  tt(["3 razones para", "llevarla *en la billetera"], 0, 1.75);
+  foto("../../assets/images/thinness.webp", 1.8, 3, { oscuro: true });
+  numero("1", 1.85, 4.75); tt(["No se nota:", "*mide 1,8 mm"], 2, 4.75, { abajo: true });
+  mapa(4.8, 3.2, "Billetera · Gimnasio", "Última ubicación hace 8 min", [30, 66]);
+  numero("2", 4.85, 7.95, 1580); tt(["Si no la encontrás,", "*la ves en el celu"], 5, 7.95, { top: 200 });
+  foto("../../assets/images/charging.webp", 8, 3, { oscuro: true });
+  numero("3", 8.05, 10.95); tt(["Se carga", "*apoyándola"], 8.2, 10.95, { abajo: true });
+  const l = plano(`<div class="lista"><div><i>✓</i>iPhone o Android</div><div><i>✓</i>6 meses de garantía</div><div><i>✓</i>Envíos a todo el país</div></div>`, 11, 2.6, { golpe: false });
+  l.style.background = "#0d0d0d";
+  l.querySelectorAll(".lista div").forEach((d, i) => anim(d, [{ opacity: 0, transform: "translateX(-100px)" }, { opacity: 1, transform: "none" }], 11.1 + i * .35, .3));
+  tt(["Y además…"], 11.05, 13.55, { top: 360 });
+  cierre(13.6, `desde ${fmt(C.precio1)} · 5% off con ${C.codigo}`);
+}
+
+/* ============ 6. Cosas que no sabías que necesitabas (14 s) ============ */
+if (v === "ritmo-necesitabas") {
+  tarjeta(0, 2.2, [{ transform: "rotateX(8deg) rotateY(-220deg)" }, { transform: "rotateX(4deg) rotateY(-16deg)" }]);
+  tt(["Cosas que no sabías", "*que necesitabas"], 0, 2.15);
+  parte(0, 14);
+  tarjeta(2.2, 1.6, [{ transform: "rotateY(-16deg)" }, { transform: "rotateY(78deg)" }]);
+  tt(["Una tarjeta de *1,8 mm…"], 2.25, 3.75);
+  foto("../../assets/images/how_wallet.webp", 3.8, 1.3);
+  tt(["…que va en tu billetera"], 3.85, 5.05);
+  foto("../../assets/images/use_travel.webp", 5.1, 1.2);
+  tt(["o en tu valija ✈️"], 5.15, 6.25);
+  mapa(6.3, 2.4, "Valija · Aeropuerto", "Última ubicación hace 25 min", [76, 70]);
+  tt(["y la *ubicás desde el celu"], 6.4, 8.65);
+  const cont = plano(`<div class="contador" style="top:700px"><b>+25</b><span>ya la compraron</span><small>en Mercado Libre</small></div>`, 8.7, 2, { golpe: false });
+  cont.style.background = "#0d0d0d";
+  tt(["Se llama *LOKEBU"], 8.75, 10.65, { top: 360 });
+  cierre(10.7, `Código ${C.codigo} · 5% off · Seguime para la parte 2`);
+}
+
 window.__duracion = Number(sec.dataset.dur);
 window.__tiempo = async (seg) => {
   for (const a of document.getAnimations()) { a.pause(); a.currentTime = seg * 1000; }
+  for (const c of contadores) {
+    const k = Math.max(0, Math.min(1, (seg - c.t) / c.d));
+    c.el.textContent = "+" + Math.round(c.hasta * (1 - Math.pow(1 - k, 3)));
+  }
   await Promise.all(videos.map(({ el, t0 }) => new Promise((ok) => {
     const dur = el.duration || 0;
     const local = Math.max(0, Math.min(dur ? dur - .04 : 0, seg - t0));

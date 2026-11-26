@@ -44,6 +44,9 @@ const VIDEOS = {
   "ritmo-grosor": { plantilla: "ritmo.html", liviano: true },
   "ritmo-pov": { plantilla: "ritmo.html", liviano: true },
   "ritmo-codigo": { plantilla: "ritmo.html", liviano: true },
+  "ritmo-resena": { plantilla: "ritmo.html", liviano: true },
+  "ritmo-razones": { plantilla: "ritmo.html", liviano: true },
+  "ritmo-necesitabas": { plantilla: "ritmo.html", liviano: true },
 };
 const salida = path.join(__dirname, "salida");
 
