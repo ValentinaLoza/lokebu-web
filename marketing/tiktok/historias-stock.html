@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<title>LOKEBU · historias con stock real</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Manrope:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&display=block" rel="stylesheet" />
+<style>
+/* Lienzo 1080x1920. Clips de Mixkit (licencia gratuita) recortados en vertical en stock/*.webm.
+   El renderizador llama a window.__tiempo(t): ubica cada clip en su cuadro exacto y las animaciones en t. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+.video{display:none;position:relative;width:1080px;height:1920px;overflow:hidden;background:#000}
+.video.activo{display:block}
+.plano{position:absolute;inset:0;opacity:0;overflow:hidden}
+.plano video,.plano .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background-size:cover;background-position:center}
+/* sombra suave abajo para que el texto se lea sin recuadros */
+.plano::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28) 0%,rgba(0,0,0,0) 22%,rgba(0,0,0,0) 48%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.35) 100%);pointer-events:none}
+
+.cartel{position:absolute;left:90px;right:170px;top:1180px;font-family:"Instrument Serif",serif;font-size:90px;line-height:1.04;letter-spacing:-.5px;color:#fbf6ea;text-shadow:0 3px 30px rgba(0,0,0,.55);opacity:0;z-index:5}
+.cartel i{color:#eaff9a}
+.rotulo{position:absolute;left:90px;top:1100px;font-family:"IBM Plex Mono",monospace;font-size:31px;letter-spacing:5px;color:#efe9dc;text-shadow:0 2px 16px rgba(0,0,0,.6);opacity:0;z-index:5}
+.aviso{position:absolute;left:0;right:0;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:23px;letter-spacing:2px;color:rgba(255,255,255,.55);opacity:0;z-index:5}
+
+/* Celular con el mapa, sobre el último plano desenfocado */
+.fondoBlur{position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);object-fit:cover;filter:blur(26px) brightness(.55)}
+.cel{position:absolute;left:250px;top:400px;width:580px;height:1080px;border-radius:86px;background:#0b0b0b;padding:20px;box-shadow:0 60px 140px rgba(0,0,0,.6),inset 0 0 0 4px #2b2b2b;z-index:3}
+.cel::before{content:"";position:absolute;top:38px;left:50%;width:160px;height:44px;transform:translateX(-50%);background:#0b0b0b;border-radius:99px;z-index:5}
+.pant{position:relative;width:100%;height:100%;border-radius:66px;overflow:hidden;background:#eef0ea}
+.pant svg{position:absolute;inset:0;width:100%;height:100%}
+.yo{position:absolute;left:50%;top:56%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:#2f7bf6;border:6px solid #fff;box-shadow:0 0 0 22px rgba(47,123,246,.18)}
+.radar{position:absolute;left:50%;top:56%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;border:5px solid rgba(47,123,246,.55);opacity:0}
+.pin{position:absolute;opacity:0}
+.pin .globo{display:block;width:100px;height:100px;border-radius:50%;background:#151515;border:7px solid #d8ff3f;position:relative;box-shadow:0 16px 40px rgba(0,0,0,.3)}
+.pin .globo::before{content:"";position:absolute;left:50%;top:50%;width:34px;height:52px;transform:translate(-50%,-50%);border-radius:6px;background:#2d2d2d;box-shadow:inset 0 0 0 2px #444}
+.pin::after{content:"";position:absolute;left:50%;bottom:-14px;width:28px;height:28px;background:#151515;transform:translateX(-50%) rotate(45deg);border-radius:4px;z-index:-1}
+.hoja{position:absolute;left:20px;right:20px;bottom:20px;background:#fff;border-radius:46px;padding:32px;display:flex;gap:24px;align-items:center;opacity:0;font-family:Manrope,sans-serif}
+.hoja .ico{flex:0 0 86px;height:86px;border-radius:24px;background:#d8ff3f}
+.hoja b{display:block;font-size:36px;line-height:1.15;color:#151515}
+.hoja span{display:block;font-size:28px;color:#66645f;margin-top:6px}
+
+/* Placa final */
+.final{position:absolute;inset:0;background:#080808;opacity:0;z-index:8}
+.final .frase{position:absolute;left:0;right:0;top:730px;text-align:center;font-family:"Instrument Serif",serif;font-size:80px;color:#fbf6ea}
+.final .frase i{color:#eaff9a}
+.final .marca{position:absolute;left:0;right:0;top:890px;display:flex;justify-content:center;align-items:flex-end;gap:14px;font-family:Manrope,sans-serif;font-weight:800;font-size:100px;letter-spacing:-4px;color:#fbf6ea}
+.final .marca i{display:block;width:72px;height:20px;border-radius:99px;background:#d8ff3f;margin-bottom:16px}
+.final .web{position:absolute;left:0;right:0;top:1050px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:34px;letter-spacing:6px;color:#a9a49a}
+.final .aviso{top:1620px;opacity:1}
+</style>
+</head>
+<body>
+
+<section class="video" data-v="stock-cafe" data-dur="25">
+  <div class="final"><p class="frase">Para lo que <i>no querés perder.</i></p><div class="marca"><span>lokebu</span><i></i></div><p class="web">LOKEBU.COM.AR</p><p class="aviso">HISTORIA FICTICIA · IMÁGENES DE ARCHIVO</p></div>
+</section>
+
+<section class="video" data-v="stock-valija" data-dur="25">
+  <div class="final"><p class="frase">Viajá <i>tranquila.</i></p><div class="marca"><span>lokebu</span><i></i></div><p class="web">LOKEBU.COM.AR</p><p class="aviso">HISTORIA FICTICIA · IMÁGENES DE ARCHIVO</p></div>
+</section>
+
+<script>
+const MAPA = `<svg viewBox="0 0 300 560" preserveAspectRatio="xMidYMid slice"><rect width="300" height="560" fill="#eef0ea"/><path d="M-20 140 C 60 160, 120 80, 200 130 S 300 220, 330 190" fill="none" stroke="#bcdcf2" stroke-width="22"/><rect x="170" y="330" width="110" height="80" rx="10" fill="#d4e8c8"/><rect x="20" y="410" width="70" height="90" rx="10" fill="#d4e8c8"/><g stroke="#fff" stroke-linecap="round"><path d="M0 250 H300 M0 350 H300 M0 460 H300 M60 170 V560 M150 160 V560 M240 170 V560" stroke-width="12"/><path d="M0 300 H300 M0 410 H300 M105 170 V560 M195 170 V560 M20 210 L280 520" stroke-width="5"/></g></svg>`;
+
+/* Cada historia: lista de planos.
+   clip: archivo en stock/, foto: imagen del sitio, mapa: celular con la ubicación.
+   t: inicio, d: duración (s). Textos: rotulo / cartel con su momento. */
+const HISTORIAS = {
+  "stock-cafe": {
+    fin: 22,
+    planos: [
+      { clip: "4373", t: 0, d: 2.7, rotulo: ["MARTES · 09:15", .4, 2.4] },
+      { clip: "223", t: 2.6, d: 2.5 },
+      { clip: "205", t: 5, d: 2.1 },
+      { clip: "39790", t: 7, d: 3.1, cartel: ["Una llamada. <i>Había que salir ya.</i>", 7.5, 9.8] },
+      { foto: "../../assets/images/everyday.webp", t: 10, d: 2.5, cartel: ["La billetera <i>quedó en la mesa.</i>", 10.3, 12.3] },
+      { clip: "3428", t: 12.4, d: 2.1 },
+      { clip: "8739", t: 14.4, d: 2.7, cartel: ["¿Y la <i>billetera?</i>", 15, 16.9] },
+      { clip: "39815", t: 17, d: 1.9 },
+      { mapa: { blur: "39815", pin: [62, 30], titulo: "Billetera · Café de la plaza", sub: "Última ubicación hace 25 min" }, t: 18.8, d: 3.3,
+        cartel: ["Estaba <i>donde la dejó.</i>", 20.3], cartelArriba: true, aviso: 19.6 },
+    ],
+  },
+  "stock-valija": {
+    fin: 22,
+    planos: [
+      { clip: "36351", t: 0, d: 2.7, rotulo: ["VIERNES · 19:40", .4, 2.4] },
+      { clip: "23976", t: 2.6, d: 2.5 },
+      { clip: "22433", t: 5, d: 2.4, cartel: ["La valija <i>va por otro camino.</i>", 5.4, 7.2] },
+      { clip: "40102", t: 7.3, d: 2.4 },
+      { clip: "27752", t: 9.6, d: 3.1, rotulo: ["LLEGADAS · 23:10", 9.9, 12.4], cartel: ["La suya <i>no salió.</i>", 10.6, 12.5] },
+      { clip: "42270", t: 12.6, d: 2.7 },
+      { mapa: { blur: "42270", pin: [62, 64], titulo: "Valija · Terminal B", sub: "Última ubicación hace 6 min" }, t: 15.2, d: 3.4,
+        cartel: ["Sabía <i>dónde buscar.</i>", 16.8, 18.5], cartelArriba: true, aviso: 16 },
+      { clip: "46586", t: 18.5, d: 3.6, cartel: ["Y llegó <i>con ella.</i>", 19.2] },
+    ],
+  },
+};
+
+const v = new URLSearchParams(location.search).get("v") || "stock-cafe";
+const sec = document.querySelector(`.video[data-v="${v}"]`);
+sec.classList.add("activo");
+const H = HISTORIAS[v];
+const FUNDIDO = .3;
+const videos = []; // { el, t0 } para ubicar cada clip en su cuadro
+
+function anim(el, frames, t, d, extra = {}) {
+  el.animate(frames, { delay: t * 1000, duration: d * 1000, fill: extra.fill || "both", easing: extra.easing || "cubic-bezier(.4,0,.2,1)", iterations: extra.it || 1 });
+}
+function texto(el, t, hasta) {
+  anim(el, [{ opacity: 0, transform: "translateY(22px)", filter: "blur(8px)" }, { opacity: 1, transform: "none", filter: "blur(0)" }], t, 1);
+  if (hasta) anim(el, [{ opacity: 1 }, { opacity: 0 }], hasta, .4, { fill: "forwards" });
+}
+function nuevoVideo(id, t0, padre, clase) {
+  const el = document.createElement("video");
+  el.src = `stock/${id}.webm`; el.muted = true; el.preload = "auto"; el.playsInline = true;
+  if (clase) el.className = clase;
+  padre.appendChild(el);
+  videos.push({ el, t0 });
+  return el;
+}
+
+for (const p of H.planos) {
+  const div = document.createElement("div");
+  div.className = "plano";
+  sec.insertBefore(div, sec.querySelector(".final"));
+  if (p.clip) {
+    const el = nuevoVideo(p.clip, p.t, div);
+    anim(el, [{ transform: "scale(1.0)" }, { transform: "scale(1.07)" }], p.t, p.d, { easing: "linear" }); // acercamiento lento
+  } else if (p.foto) {
+    const f = document.createElement("div"); f.className = "foto"; f.style.backgroundImage = `url(${p.foto})`; div.appendChild(f);
+    anim(f, [{ transform: "scale(1.04) translateY(1%)" }, { transform: "scale(1.14) translateY(-1%)" }], p.t, p.d, { easing: "linear" });
+  } else if (p.mapa) {
+    const m = p.mapa;
+    const fondo = nuevoVideo(m.blur, p.t - 1.2, div, "fondoBlur"); // último cuadro del plano anterior, desenfocado
+    const cel = document.createElement("div"); cel.className = "cel";
+    cel.innerHTML = `<div class="pant">${MAPA}<span class="yo"></span><span class="radar"></span>
+      <span class="pin" style="left:${m.pin[0]}%;top:${m.pin[1]}%"><span class="globo"></span></span>
+      <div class="hoja"><span class="ico"></span><div><b>${m.titulo}</b><span>${m.sub}</span></div></div></div>`;
+    div.appendChild(cel);
+    anim(cel, [{ transform: "translateY(120px) scale(.94)", opacity: 0 }, { transform: "none", opacity: 1 }], p.t, .7);
+    anim(cel.querySelector(".radar"), [{ transform: "scale(.1)", opacity: 1 }, { transform: "scale(1.3)", opacity: 0 }], p.t + .5, 1, { it: 1 });
+    anim(cel.querySelector(".pin"), [{ opacity: 0, transform: "translate(-50%,-160%) scale(.6)" }, { opacity: 1, transform: "translate(-50%,-100%) scale(1)" }], p.t + 1.4, .6, { easing: "cubic-bezier(.2,1.4,.4,1)" });
+    anim(cel.querySelector(".hoja"), [{ opacity: 0, transform: "translateY(40px)" }, { opacity: 1, transform: "none" }], p.t + 1.7, .5);
+  }
+  // fundido de entrada y de salida del plano
+  anim(div, [{ opacity: 0 }, { opacity: 1 }], Math.max(0, p.t - FUNDIDO / 2), FUNDIDO);
+  anim(div, [{ opacity: 1 }, { opacity: 0 }], p.t + p.d - FUNDIDO / 2, FUNDIDO, { fill: "forwards" });
+  if (p.rotulo) { const r = document.createElement("p"); r.className = "rotulo"; r.textContent = p.rotulo[0]; sec.appendChild(r); texto(r, p.rotulo[1], p.rotulo[2]); }
+  if (p.cartel) { const c = document.createElement("p"); c.className = "cartel"; c.innerHTML = p.cartel[0]; if (p.cartelArriba) c.style.top = "190px"; sec.appendChild(c); texto(c, p.cartel[1], p.cartel[2]); }
+  if (p.aviso) { const a = document.createElement("p"); a.className = "aviso"; a.style.top = "1720px"; a.textContent = "SIMULACIÓN · LA UBICACIÓN SE CONSULTA EN BUSCAR O ENCONTRAR MI DISPOSITIVO"; sec.appendChild(a); anim(a, [{ opacity: 0 }, { opacity: 1 }], p.aviso, .5); anim(a, [{ opacity: 1 }, { opacity: 0 }], p.t + p.d - .2, .3, { fill: "forwards" }); }
+}
+anim(sec.querySelector(".final"), [{ opacity: 0 }, { opacity: 1 }], H.fin, .8);
+
+window.__duracion = Number(sec.dataset.dur);
+// Ubica cada clip en el cuadro que corresponde y espera a que el navegador lo tenga listo.
+window.__tiempo = async (seg) => {
+  for (const a of document.getAnimations()) { a.pause(); a.currentTime = seg * 1000; }
+  await Promise.all(videos.map(({ el, t0 }) => new Promise((ok) => {
+    const dur = el.duration || 0;
+    const local = Math.max(0, Math.min(dur ? dur - .04 : 0, seg - t0));
+    if (Math.abs(el.currentTime - local) < 1e-3 && el.readyState >= 2) return ok();
+    el.addEventListener("seeked", () => ok(), { once: true });
+    el.currentTime = local;
+  })));
+};
+window.__listo = () => Promise.all(videos.map(({ el }) => el.readyState >= 1 ? 1 : new Promise((ok) => el.addEventListener("loadedmetadata", ok, { once: true }))));
+</script>
+</body>
+</html>
