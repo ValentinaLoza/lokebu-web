@@ -106,3 +106,11 @@
 .pago-mail{text-align:center;font-size:.85rem;color:var(--muted);margin:14px 0 0}
 .pago-datos .dato .btn{white-space:nowrap}
 #pp-mapa{justify-self:start;background:var(--lime);color:#151515;font-weight:800;margin-top:4px}
+
+/* Código de descuento */
+.cupon-row{display:flex;gap:10px;align-items:stretch}
+.cupon-row input{flex:1;margin-top:0 !important;text-transform:uppercase;letter-spacing:.08em}
+.cupon-row .btn{flex:0 0 auto}
+#cupon-estado.ok{color:#3c6e00;font-weight:700}
+#cupon-estado.error{color:#b3261e}
+.summary-line.descuento b{color:#3c6e00}

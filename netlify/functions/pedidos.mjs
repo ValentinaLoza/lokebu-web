@@ -97,6 +97,10 @@ async function crearPedido(req) {
     return json(503, { error: "El pago con Mercado Pago no está disponible en este momento. Elegí transferencia" });
   }
 
+  const cupon = CONFIG.cupon(v.cupon);
+  if (v.cupon && !cupon) return json(400, { error: "El código de descuento no es válido" });
+  const descuento = cupon ? CONFIG.descuento(producto.precio, cupon.codigo) : 0;
+
   const ahora = new Date().toISOString();
   const pedido = {
     id: generarId(),
@@ -111,7 +115,9 @@ async function crearPedido(req) {
     precioProducto: producto.precio,
     envio,
     zona,
-    total: producto.precio + envio,
+    cupon: cupon ? cupon.codigo : null,
+    descuento,
+    total: producto.precio - descuento + envio,
     variante: v.variante,
     nombre,
     telefono,

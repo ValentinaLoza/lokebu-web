@@ -42,9 +42,9 @@ async function crearPreferencia(pedido, siteUrl) {
   const items = [
     {
       id: pedido.productoId,
-      title: `${pedido.producto} (${pedido.variante})`,
+      title: `${pedido.producto} (${pedido.variante})${pedido.cupon ? ` · ${pedido.cupon} -${pedido.descuento}` : ""}`,
       quantity: 1,
-      unit_price: pedido.precioProducto,
+      unit_price: pedido.precioProducto - (pedido.descuento || 0),
       currency_id: "ARS",
     },
   ];

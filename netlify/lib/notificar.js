@@ -121,6 +121,7 @@ function armarMail(pedido, tipo) {
       fila("Email", esc(pedido.email)),
       fila("Entrega", esc(pedido.entrega)),
       fila("Envío", pedido.envio ? fmt(pedido.envio) : "Sin costo"),
+      fila("Descuento", pedido.descuento ? `−${fmt(pedido.descuento)} · código ${esc(pedido.cupon)}` : ""),
       fila("Pago", pago),
       fila("Comentarios", esc(pedido.comentarios)),
     ].join(""),
@@ -159,6 +160,7 @@ function armarMailCliente(pedido, tipo) {
     fila("Producto", `${esc(pedido.producto)} · ${esc(pedido.variante === "iOS" ? "iPhone (iOS)" : pedido.variante)}`),
     fila("Entrega", esc(pedido.direccion ? pedido.entrega : `Retiro en ${CONFIG.lugarRetiro(pedido.entrega)}`)),
     fila("Envío", pedido.envio ? fmt(pedido.envio) : "Sin costo"),
+    fila("Descuento", pedido.descuento ? `−${fmt(pedido.descuento)} (${esc(pedido.cupon)})` : ""),
     fila("Pago", esc(NOMBRE_PAGO[pedido.pago] || pedido.pago)),
   ].join("");
   const efectivo = pedido.pago === "efectivo";

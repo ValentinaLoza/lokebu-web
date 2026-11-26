@@ -113,7 +113,16 @@
         </fieldset>
 
         <fieldset class="ck-block">
-          <legend>6. Comentarios (opcional)</legend>
+          <legend>6. Código de descuento (opcional)</legend>
+          <div class="cupon-row">
+            <input type="text" name="cupon" id="cupon" placeholder="Ej: TIKTOK" autocomplete="off" autocapitalize="characters" spellcheck="false" />
+            <button type="button" class="btn btn-dark btn-sm" id="cupon-aplicar">Aplicar</button>
+          </div>
+          <p class="hint" id="cupon-estado" aria-live="polite"></p>
+        </fieldset>
+
+        <fieldset class="ck-block">
+          <legend>7. Comentarios (opcional)</legend>
           <textarea name="comentarios" rows="3" placeholder="Algo que tengamos que saber del pedido"></textarea>
         </fieldset>
 
@@ -133,6 +142,7 @@
       <aside class="summary" aria-label="Resumen del pedido">
         <h2>Resumen</h2>
         <div class="summary-line"><span id="sum-producto">Elegí un producto</span><b id="sum-precio">—</b></div>
+        <div class="summary-line descuento" id="sum-desc-linea" hidden><span id="sum-desc-nombre">Descuento</span><b id="sum-desc">—</b></div>
         <div class="summary-line"><span>Envío</span><b id="sum-envio">A confirmar</b></div>
         <div class="summary-line total"><span>Total</span><b id="sum-total">—</b></div>
         <p class="summary-note">Los precios son finales y en pesos argentinos. No se discrimina IVA.</p>
