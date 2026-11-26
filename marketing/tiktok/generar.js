@@ -17,7 +17,9 @@ const { chromium } = require("playwright");
 const FPS = 30;
 // Tratamiento de cine: color cálido y apagado, viñeta y grano de película.
 const CINE = "eq=contrast=1.07:saturation=0.86:gamma=0.97,colorbalance=rs=0.035:gs=0.01:bs=-0.035:rh=0.03:bh=-0.04,vignette=angle=PI/4.6,noise=alls=6:allf=t+u";
-const CRF_CINE = "24"; // el grano pesa mucho: un poco más de compresión mantiene el look con archivos livianos
+const CRF_CINE = "24";
+// Historias ilustradas: grano y viñeta suaves, para que se sienta de cine sin ensuciar el dibujo.
+const HISTORIA = "eq=contrast=1.04:saturation=0.95,vignette=angle=PI/5,noise=alls=4:allf=t+u"; // el grano pesa mucho: un poco más de compresión mantiene el look con archivos livianos
 const VIDEOS = {
   // Publicidad (plantilla.html)
   "fina": { plantilla: "plantilla.html" },
@@ -30,6 +32,9 @@ const VIDEOS = {
   "cine-objeto": { plantilla: "cine.html", filtro: CINE },
   "cine-dia": { plantilla: "cine.html", filtro: CINE },
   "cine-viaje": { plantilla: "cine.html", filtro: CINE },
+  // Historias actuadas (historias.html)
+  "historia-cafe": { plantilla: "historias.html", filtro: HISTORIA },
+  "historia-valija": { plantilla: "historias.html", filtro: HISTORIA },
 };
 const salida = path.join(__dirname, "salida");
 
@@ -70,7 +75,8 @@ async function generar(browser, nombre) {
   const todos = Object.keys(VIDEOS);
   const lista = !pedidos.length ? todos
     : pedidos[0] === "cine" ? todos.filter((v) => v.startsWith("cine-"))
-    : pedidos[0] === "publicidad" ? todos.filter((v) => !v.startsWith("cine-"))
+    : pedidos[0] === "historias" ? todos.filter((v) => v.startsWith("historia-"))
+    : pedidos[0] === "publicidad" ? todos.filter((v) => !v.startsWith("cine-") && !v.startsWith("historia-"))
     : pedidos;
   fs.mkdirSync(salida, { recursive: true });
   const browser = await chromium.launch();
