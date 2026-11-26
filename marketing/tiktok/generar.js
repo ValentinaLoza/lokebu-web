@@ -40,6 +40,10 @@ const VIDEOS = {
   // Historias con clips reales de stock (historias-stock.html). Antes: bash marketing/tiktok/stock.sh
   "stock-cafe": { plantilla: "historias-stock.html", filtro: STOCK, liviano: true },
   "stock-valija": { plantilla: "historias-stock.html", filtro: STOCK, liviano: true },
+  // Alto ritmo, estética nativa de TikTok (ritmo.html). Usa clips de stock.sh
+  "ritmo-grosor": { plantilla: "ritmo.html", liviano: true },
+  "ritmo-pov": { plantilla: "ritmo.html", liviano: true },
+  "ritmo-codigo": { plantilla: "ritmo.html", liviano: true },
 };
 const salida = path.join(__dirname, "salida");
 
@@ -85,7 +89,8 @@ async function generar(browser, nombre) {
     : pedidos[0] === "cine" ? todos.filter((v) => v.startsWith("cine-"))
     : pedidos[0] === "historias" ? todos.filter((v) => v.startsWith("historia-"))
     : pedidos[0] === "stock" ? todos.filter((v) => v.startsWith("stock-"))
-    : pedidos[0] === "publicidad" ? todos.filter((v) => !/^(cine|historia|stock)-/.test(v))
+    : pedidos[0] === "ritmo" ? todos.filter((v) => v.startsWith("ritmo-"))
+    : pedidos[0] === "publicidad" ? todos.filter((v) => !/^(cine|historia|stock|ritmo)-/.test(v))
     : pedidos;
   fs.mkdirSync(salida, { recursive: true });
   const browser = await chromium.launch();

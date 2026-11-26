@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8" />
+<title>LOKEBU · videos de alto ritmo</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=block" rel="stylesheet" />
+<style>
+/* Estética nativa de TikTok: texto en recuadros blancos, cortes cada ~1 s y "golpes" de zoom.
+   Mismo mecanismo que historias-stock.html: window.__tiempo(t) ubica clips y animaciones. */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000;font-family:Manrope,sans-serif}
+.video{display:none;position:relative;width:1080px;height:1920px;overflow:hidden;background:#0d0d0d}
+.video.activo{display:block}
+.plano{position:absolute;inset:0;overflow:hidden;opacity:0}
+.plano video,.plano .foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background-size:cover;background-position:center}
+.plano.oscuro::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.25)}
+
+/* Subtítulo estilo TikTok */
+.tt{position:absolute;left:0;right:0;top:360px;display:flex;flex-direction:column;align-items:center;gap:0;z-index:6;opacity:0}
+.tt span{display:inline-block;background:#fff;color:#111;font-weight:800;font-size:90px;line-height:1.12;letter-spacing:-1.5px;padding:6px 26px;border-radius:18px;margin:-6px 0;text-align:center;max-width:900px}
+.tt span.lima{background:#d8ff3f}
+.tt em.res{font-style:normal;background:#d8ff3f;border-radius:12px;padding:0 10px;margin-right:-10px}
+.tt.abajo{top:auto;bottom:520px}
+
+/* Tarjeta 3D */
+.escena3d{position:absolute;inset:0;perspective:2600px;display:grid;place-items:center}
+.escena3d::before{content:"";position:absolute;width:900px;height:900px;border-radius:50%;background:radial-gradient(circle,#e3ff6e 0%,#d8ff3f 38%,rgba(216,255,63,0) 70%)}
+.tarjeta{position:relative;width:470px;aspect-ratio:54/85.6;transform-style:preserve-3d}
+.cuerpo{position:absolute;inset:0;transform-style:preserve-3d}
+.cara,.capa{position:absolute;inset:0;border-radius:7%/4.4%;backface-visibility:hidden}
+.capa{background:#2c2c2c;backface-visibility:visible}
+.frente{transform:translateZ(7.8px);background:radial-gradient(120% 90% at 30% 10%,#2b2b2b 0%,#151515 45%,#0c0c0c 100%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.06)}
+.dorso{transform:rotateY(180deg) translateZ(7.8px);background:#0b0b0b}
+.ranura{position:absolute;top:6.5%;left:50%;width:27%;height:4.4%;transform:translateX(-50%);border-radius:99px;background:#efece4;box-shadow:inset 0 4px 6px rgba(0,0,0,.55)}
+.senal{position:absolute;left:50%;bottom:15%;width:23%;transform:translateX(-50%);fill:#8d8d8d;stroke:#8d8d8d;stroke-width:2.2;stroke-linecap:round}
+.senal path{fill:none}
+
+/* Comparación de grosor (a escala entre sí) */
+.compara{position:absolute;left:0;right:0;top:760px;display:flex;justify-content:center;align-items:flex-end;gap:140px}
+.compara .item{display:flex;flex-direction:column;align-items:center;gap:30px}
+.compara .perfil{width:var(--g);height:560px;border-radius:calc(var(--g) / 2);background:linear-gradient(90deg,#3a3a3a,#1a1a1a 50%,#2e2e2e)}
+.compara .item.rival .perfil{background:linear-gradient(90deg,#e9e9e9,#bdbdbd 50%,#dcdcdc);box-shadow:0 0 0 2px #999 inset}
+.compara b{font-size:84px;letter-spacing:-3px;color:#fff;line-height:1}
+.compara small{font-size:34px;color:#cfcfca;font-weight:700;text-align:center;max-width:360px;line-height:1.2}
+.compara .item.lokebu b{color:#d8ff3f}
+
+/* Precio */
+.precios{position:absolute;left:90px;right:90px;top:640px;display:flex;flex-direction:column;gap:34px}
+.fila{background:#fff;border-radius:40px;padding:40px 46px;display:flex;justify-content:space-between;align-items:center}
+.fila.lima{background:#d8ff3f}
+.fila .nombre{font-size:44px;font-weight:800;color:#111}
+.fila .nombre small{display:block;font-size:30px;font-weight:700;color:#555;margin-top:4px}
+.fila .monto{text-align:right}
+.fila .antes{display:block;font-size:40px;font-weight:700;color:#888;text-decoration:line-through;text-decoration-thickness:4px}
+.fila .ahora{display:block;font-size:92px;font-weight:800;letter-spacing:-4px;color:#111;line-height:1}
+.codigo{align-self:center;margin-top:20px;border:5px dashed #d8ff3f;color:#d8ff3f;border-radius:30px;padding:24px 50px;font-size:72px;font-weight:800;letter-spacing:6px}
+
+/* Celular con mapa */
+.cel{position:absolute;left:270px;top:470px;width:540px;height:1000px;border-radius:80px;background:#0b0b0b;padding:18px;box-shadow:0 60px 140px rgba(0,0,0,.6),inset 0 0 0 4px #2b2b2b}
+.cel::before{content:"";position:absolute;top:36px;left:50%;width:150px;height:40px;transform:translateX(-50%);background:#0b0b0b;border-radius:99px;z-index:5}
+.pant{position:relative;width:100%;height:100%;border-radius:62px;overflow:hidden;background:#eef0ea}
+.pant svg{position:absolute;inset:0;width:100%;height:100%}
+.yo{position:absolute;left:50%;top:56%;width:32px;height:32px;margin:-16px 0 0 -16px;border-radius:50%;background:#2f7bf6;border:6px solid #fff;box-shadow:0 0 0 20px rgba(47,123,246,.18)}
+.pin{position:absolute;opacity:0}
+.pin .globo{display:block;width:96px;height:96px;border-radius:50%;background:#151515;border:7px solid #d8ff3f;position:relative}
+.pin .globo::before{content:"";position:absolute;left:50%;top:50%;width:32px;height:50px;transform:translate(-50%,-50%);border-radius:6px;background:#2d2d2d;box-shadow:inset 0 0 0 2px #444}
+.pin::after{content:"";position:absolute;left:50%;bottom:-13px;width:26px;height:26px;background:#151515;transform:translateX(-50%) rotate(45deg);border-radius:4px;z-index:-1}
+.hoja{position:absolute;left:18px;right:18px;bottom:18px;background:#fff;border-radius:42px;padding:28px;display:flex;gap:22px;align-items:center;opacity:0}
+.hoja .ico{flex:0 0 80px;height:80px;border-radius:22px;background:#d8ff3f}
+.hoja b{display:block;font-size:34px;line-height:1.15;color:#151515}
+.hoja span{display:block;font-size:26px;color:#66645f;margin-top:6px}
+.aviso{position:absolute;left:0;right:0;text-align:center;font-size:22px;letter-spacing:2px;font-weight:600;color:rgba(255,255,255,.55);z-index:6;opacity:0}
+
+/* Cierre */
+.cierre{position:absolute;inset:0;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px}
+.cierre .marca{display:flex;align-items:flex-end;gap:14px;font-weight:800;font-size:120px;letter-spacing:-5px;color:#fff}
+.cierre .marca i{display:block;width:84px;height:24px;border-radius:99px;background:#d8ff3f;margin-bottom:20px}
+.cierre .cta{background:#d8ff3f;color:#111;border-radius:999px;padding:30px 56px;font-size:60px;font-weight:800}
+.cierre .sub{font-size:40px;font-weight:700;color:#cfcfca}
+</style>
+</head>
+<body>
+<section class="video" data-v="ritmo-grosor" data-dur="15"></section>
+<section class="video" data-v="ritmo-pov" data-dur="15"></section>
+<section class="video" data-v="ritmo-codigo" data-dur="13"></section>
+
+<script>
+const C = { precio1: 29990, precio2: 49990, pct: 5, codigo: "TIKTOK" };
+const fmt = (n) => "$" + Number(n).toLocaleString("es-AR");
+const conDesc = (p) => p - Math.round((p * C.pct) / 100);
+const SENAL = `<svg class="senal" viewBox="0 0 48 32"><circle cx="24" cy="16" r="3.2"/><path d="M17.5 9.5a9 9 0 0 0 0 13M30.5 9.5a9 9 0 0 1 0 13M12.5 5a15.5 15.5 0 0 0 0 22M35.5 5a15.5 15.5 0 0 1 0 22M7.5 1a22 22 0 0 0 0 30M40.5 1a22 22 0 0 1 0 30"/></svg>`;
+const TARJETA = `<div class="escena3d"><div class="tarjeta"><div class="cuerpo">
+  ${[-6, -4, -2, 0, 2, 4, 6].map((z) => `<i class="capa" style="transform:translateZ(${z * 0.9}px)"></i>`).join("")}
+  <div class="cara frente"><span class="ranura"></span>${SENAL}</div><div class="cara dorso"><span class="ranura"></span></div></div></div></div>`;
+const MAPA = `<svg viewBox="0 0 300 560" preserveAspectRatio="xMidYMid slice"><rect width="300" height="560" fill="#eef0ea"/><path d="M-20 140 C 60 160, 120 80, 200 130 S 300 220, 330 190" fill="none" stroke="#bcdcf2" stroke-width="22"/><rect x="170" y="330" width="110" height="80" rx="10" fill="#d4e8c8"/><g stroke="#fff" stroke-linecap="round"><path d="M0 250 H300 M0 350 H300 M0 460 H300 M60 170 V560 M150 160 V560 M240 170 V560" stroke-width="12"/><path d="M0 300 H300 M0 410 H300 M105 170 V560 M195 170 V560" stroke-width="5"/></g></svg>`;
+
+const v = new URLSearchParams(location.search).get("v") || "ritmo-grosor";
+const sec = document.querySelector(`.video[data-v="${v}"]`);
+sec.classList.add("activo");
+const videos = [];
+
+function anim(el, frames, t, d, o = {}) { el.animate(frames, { delay: t * 1000, duration: d * 1000, fill: o.fill || "both", easing: o.easing || "cubic-bezier(.2,.8,.2,1)", iterations: o.it || 1 }); }
+// Plano que entra con corte seco y un "golpe" de zoom
+function plano(html, t, d, o = {}) {
+  const div = document.createElement("div"); div.className = "plano" + (o.oscuro ? " oscuro" : ""); div.innerHTML = html; sec.appendChild(div);
+  anim(div, [{ opacity: 0 }, { opacity: 1 }], t, .05);
+  anim(div, [{ opacity: 1 }, { opacity: 0 }], t + d, .05, { fill: "forwards" });
+  if (o.golpe !== false) anim(div.firstElementChild, [{ transform: "scale(1.16)" }, { transform: "scale(1.02)" }], t, .5);
+  return div;
+}
+function clip(id, t, d, o = {}) {
+  const div = plano(`<video muted preload="auto" src="stock/${id}.webm"></video>`, t, d, o);
+  videos.push({ el: div.querySelector("video"), t0: t - (o.desde || 0) });
+  return div;
+}
+const foto = (src, t, d, o) => plano(`<div class="foto" style="background-image:url(${src})"></div>`, t, d, o);
+// Subtítulo estilo TikTok: líneas = ["texto", "otra línea"]; las que empiezan con * van en verde lima
+function tt(lineas, t, hasta, o = {}) {
+  const div = document.createElement("div"); div.className = "tt" + (o.abajo ? " abajo" : "");
+  if (o.top) div.style.top = o.top + "px";
+  // "*texto" = línea entera en verde; "algo *texto" = desde el asterisco, resaltado en verde
+  div.innerHTML = lineas.map((l) => l.startsWith("*") ? `<span class="lima">${l.slice(1)}</span>`
+    : l.includes("*") ? `<span>${l.replace(/\*(.+)$/, '<em class="res">$1</em>')}</span>` : `<span>${l}</span>`).join("");
+  sec.appendChild(div);
+  anim(div, [{ opacity: 0, transform: "scale(.7)" }, { opacity: 1, transform: "scale(1.06)" }, { opacity: 1, transform: "scale(1)" }], t, .3);
+  if (hasta) anim(div, [{ opacity: 1 }, { opacity: 0 }], hasta, .08, { fill: "forwards" });
+}
+function tarjeta(t, d, giro) {
+  const div = plano(TARJETA, t, d, { golpe: false });
+  div.style.background = "#0d0d0d";
+  anim(div.querySelector(".cuerpo"), giro, t, d, { easing: "cubic-bezier(.5,0,.2,1)" });
+  anim(div.querySelector(".tarjeta"), [{ transform: "scale(.6)" }, { transform: "scale(1.05)" }, { transform: "scale(1)" }], t, .5);
+  return div;
+}
+function mapa(t, d, titulo, sub, pin) {
+  const div = plano(`<div class="cel"><div class="pant">${MAPA}<span class="yo"></span><span class="pin" style="left:${pin[0]}%;top:${pin[1]}%"><span class="globo"></span></span><div class="hoja"><span class="ico"></span><div><b>${titulo}</b><span>${sub}</span></div></div></div></div>`, t, d, { golpe: false });
+  div.style.background = "#0d0d0d";
+  anim(div.querySelector(".cel"), [{ transform: "translateY(200px) scale(.9)" }, { transform: "none" }], t, .4);
+  anim(div.querySelector(".pin"), [{ opacity: 0, transform: "translate(-50%,-180%) scale(.5)" }, { opacity: 1, transform: "translate(-50%,-100%) scale(1)" }], t + .5, .45, { easing: "cubic-bezier(.2,1.5,.4,1)" });
+  anim(div.querySelector(".hoja"), [{ opacity: 0, transform: "translateY(40px)" }, { opacity: 1, transform: "none" }], t + .8, .35);
+  const a = document.createElement("p"); a.className = "aviso"; a.style.top = "1530px"; a.textContent = "SIMULACIÓN · SE CONSULTA EN BUSCAR O ENCONTRAR MI DISPOSITIVO"; sec.appendChild(a);
+  anim(a, [{ opacity: 0 }, { opacity: 1 }], t + .3, .2); anim(a, [{ opacity: 1 }, { opacity: 0 }], t + d, .05, { fill: "forwards" });
+}
+function cierre(t, sub) {
+  const div = plano(`<div class="cierre"><div class="marca"><span>lokebu</span><i></i></div><div class="cta">Link en la bio 👆</div><div class="sub">${sub}</div></div>`, t, 99, { golpe: false });
+  anim(div.querySelector(".cta"), [{ transform: "scale(1)" }, { transform: "scale(1.06)" }, { transform: "scale(1)" }], t + .6, .9, { it: 3 });
+}
+
+/* ============ 1. "Esto es un rastreador. Sí, esto." (15 s) ============ */
+if (v === "ritmo-grosor") {
+  tarjeta(0, 3.2, [{ transform: "rotateX(6deg) rotateY(-30deg)" }, { transform: "rotateX(4deg) rotateY(-12deg)" }]);
+  tt(["Esto es un", "*rastreador."], 0, 1.5);
+  tt(["Sí,", "*esto."], 1.5, 3.1);
+  tarjeta(3.2, 2.6, [{ transform: "rotateY(-12deg)" }, { transform: "rotateY(80deg)" }]);
+  tt(["Mirala de costado 👀"], 3.3, 5.7);
+  // comparación a escala: 8 mm vs 1,8 mm (1 mm = 20 px)
+  const comp = plano(`<div class="compara">
+      <div class="item rival"><div class="perfil" style="--g:160px"></div><b>~8 mm</b><small>rastreador redondo típico</small></div>
+      <div class="item lokebu"><div class="perfil" style="--g:36px"></div><b>1,8 mm</b><small>LOKEBU</small></div></div>`, 5.8, 3.4, { golpe: false });
+  comp.style.background = "#0d0d0d";
+  anim(comp.querySelector(".rival"), [{ opacity: 0, transform: "translateY(80px)" }, { opacity: 1, transform: "none" }], 5.9, .35);
+  anim(comp.querySelector(".lokebu"), [{ opacity: 0, transform: "translateY(80px)" }, { opacity: 1, transform: "none" }], 6.4, .35);
+  tt(["*4 veces más fina"], 6.9, 9.1, { top: 360 });
+  foto("../../assets/images/use_wallet.webp", 9.2, 1.4);
+  tt(["Entra en la billetera"], 9.25, 10.55, { abajo: true });
+  mapa(10.6, 2.2, "Billetera · Café", "Última ubicación hace 2 min", [64, 30]);
+  tt(["y la ves", "*desde tu celu"], 10.7, 12.75);
+  cierre(12.8, `desde ${fmt(C.precio1)} · 5% off con ${C.codigo}`);
+}
+
+/* ============ 2. "POV: sos la persona que pierde todo" (15 s) ============ */
+if (v === "ritmo-pov") {
+  clip("42270", 0, 1.6, { oscuro: true });
+  tt(["POV: sos la persona", "que *pierde todo"], 0, 1.55);
+  foto("../../assets/images/everyday.webp", 1.6, 1.1, { oscuro: true });
+  tt(["las llaves 🔑"], 1.65, 2.65);
+  foto("../../assets/images/use_bag.webp", 2.7, 1.1, { oscuro: true });
+  tt(["la mochila 🎒"], 2.75, 3.75);
+  clip("39790", 3.8, 1.3, { oscuro: true });
+  tt(["la billetera 😩"], 3.85, 5.05);
+  clip("22433", 5.1, 1.2, { oscuro: true });
+  tt(["hasta la valija ✈️"], 5.15, 6.25);
+  tarjeta(6.3, 2.4, [{ transform: "rotateX(6deg) rotateY(-200deg)" }, { transform: "rotateX(4deg) rotateY(-14deg)" }]);
+  tt(["hasta que", "*encontré esto"], 6.4, 8.65);
+  mapa(8.7, 2.6, "Billetera · Oficina", "Última ubicación hace 5 min", [36, 34]);
+  tt(["La abrís en el celu", "y *ves dónde quedó"], 8.8, 11.25);
+  foto("../../assets/images/thinness.webp", 11.3, 1.6);
+  tt(["*1,8 mm · iPhone o Android"], 11.35, 12.85, { abajo: true });
+  cierre(12.9, `desde ${fmt(C.precio1)} · 5% off con ${C.codigo}`);
+}
+
+/* ============ 3. Código TIKTOK (13 s) ============ */
+if (v === "ritmo-codigo") {
+  tarjeta(0, 2.6, [{ transform: "rotateX(6deg) rotateY(-40deg)" }, { transform: "rotateX(4deg) rotateY(10deg)" }]);
+  tt(["Si llegaste hasta acá", "*desde TikTok…"], 0, 2.55);
+  const pre = plano(`<div class="precios">
+      <div class="fila"><div class="nombre">1 LOKEBU<small>tarjeta rastreadora</small></div><div class="monto"><span class="antes">${fmt(C.precio1)}</span><span class="ahora">${fmt(conDesc(C.precio1))}</span></div></div>
+      <div class="fila lima"><div class="nombre">Pack x2<small>la más elegida</small></div><div class="monto"><span class="antes">${fmt(C.precio2)}</span><span class="ahora">${fmt(conDesc(C.precio2))}</span></div></div>
+      <div class="codigo">${C.codigo}</div></div>`, 2.6, 7.2, { golpe: false });
+  pre.style.background = "#0d0d0d";
+  const filas = pre.querySelectorAll(".fila");
+  anim(filas[0], [{ opacity: 0, transform: "translateX(-120px)" }, { opacity: 1, transform: "none" }], 2.7, .35);
+  anim(filas[1], [{ opacity: 0, transform: "translateX(120px)" }, { opacity: 1, transform: "none" }], 3.1, .35);
+  anim(pre.querySelector(".codigo"), [{ opacity: 0, transform: "scale(.5)" }, { opacity: 1, transform: "scale(1.1)" }, { opacity: 1, transform: "scale(1)" }], 4.4, .45);
+  tt(["*5% off con el código"], 2.7, 9.7, { top: 360 });
+  tt(["Envíos a todo el país 📦", "Cuotas con Mercado Pago 💳"], 6.4, 9.7, { abajo: true });
+  cierre(9.8, `Código ${C.codigo} · 5% off`);
+}
+
+window.__duracion = Number(sec.dataset.dur);
+window.__tiempo = async (seg) => {
+  for (const a of document.getAnimations()) { a.pause(); a.currentTime = seg * 1000; }
+  await Promise.all(videos.map(({ el, t0 }) => new Promise((ok) => {
+    const dur = el.duration || 0;
+    const local = Math.max(0, Math.min(dur ? dur - .04 : 0, seg - t0));
+    if (Math.abs(el.currentTime - local) < 1e-3 && el.readyState >= 2) return ok();
+    el.addEventListener("seeked", () => ok(), { once: true });
+    el.currentTime = local;
+  })));
+};
+window.__listo = () => Promise.all(videos.map(({ el }) => el.readyState >= 1 ? 1 : new Promise((ok) => el.addEventListener("loadedmetadata", ok, { once: true }))));
+</script>
+</body>
+</html>
